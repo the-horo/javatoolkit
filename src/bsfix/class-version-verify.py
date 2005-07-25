@@ -49,10 +49,11 @@ class cvv:
 				self.add(version, "%s:(%s)" % (filename, file))
 	
 	def do_file(self, filename):
-		if filename.endswith(".class"):
-			self.do_class(filename)
-		if filename.endswith(".jar"):
-			self.do_jar(filename)
+		if not os.path.islink(filename):
+			if filename.endswith(".class"):
+				self.do_class(filename)
+			if filename.endswith(".jar"):
+				self.do_jar(filename)
 	
 if __name__ == '__main__':
 	
