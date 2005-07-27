@@ -7,16 +7,14 @@
 include ../../makedefs.mak
 
 all:
-	javac -source 1.4 -target 1.4 JXSLT.java
 	
 dist:
 	mkdir -p ../../$(distdir)/src/bsfix
-	cp Makefile JXSLT.java bsfix build-xml-source-target.xslt xml-rewrite.py class-version-verify.py ../../$(distdir)/src/bsfix
+	cp Makefile bsfix build-xml-source-target.xslt xml-rewrite.py class-version-verify.py ../../$(distdir)/src/bsfix
 
 install: all
 	install -m 0755 bsfix $(bindir)/
 	install -d $(DESTDIR)/usr/share/javatoolkit/lib
-	install JXSLT.class $(DESTDIR)/usr/share/javatoolkit/lib/
 	install build-xml-source-target.xslt ${DESTDIR}/usr/share/javatoolkit/
 	install -m 0755 xml-rewrite.py ${bindir}/
 	install -m 0755 class-version-verify.py ${bindir}/
