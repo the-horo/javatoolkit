@@ -19,16 +19,17 @@ def parse(ins):
 	
 	lineno = 0
 	continued_line = False
-	attrib = None
-	value = None
-	root = EmptyNode()
+	attrib = ""
+	value = ""
+	root = Node()
 	
 	for x in ins.readlines():
 		lineno += 1
-	
+		x = x.strip()
+
 		if continued_line:
 			continued_line = False
-			value += x.strip().strip("\"")
+			value += x.strip("\"")
 			
 			if len(value) and value[-1] == "\\":
 				value = value[:-1]
@@ -38,11 +39,15 @@ def parse(ins):
 			root.add_kid(Node(attrib,value))
 			continue
 			
-		xs = x.split("=")
+		if len(x) == 0 or x[:1] == "#":
+			continue
+		
+		x = x.split("#", 1)[0]
+		xs = x.split("=", 2)
 		
 		if len(xs) > 1:
 			attrib = xs[0]
-			value = ("=".join(xs[1:]).strip("\n")).strip("\"")
+			value = (xs[1].strip().strip("\""))
 			
 			if value[-1] == "\\":
 				value = value[:-1]
@@ -51,8 +56,6 @@ def parse(ins):
 			
 			root.add_kid(Node(attrib,value))
 		
-		elif x.strip() == "":
-			root.add_kid(EmptyNode())
 		else:
 			raise ParseError("Malformed line " + str(lineno))
 			

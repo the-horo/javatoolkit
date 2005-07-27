@@ -24,7 +24,7 @@ class NodeIter:
         return self._node._kids[self._index]
         
 class Node:
-	def __init__(self, name, value):
+	def __init__(self, name = None, value = None):
 	    self.name = name
 	    self.value = value
 	    self._kids = []
@@ -33,7 +33,11 @@ class Node:
 	    return NodeIter(self)
 	
 	def add_kid(self, kid):
-	    self._kids.append(kid)
+		for x in self._kids:
+			if x.name == kid.name:
+				return
+			
+		self._kids.append(kid)
 	
 	def _dump_kids(self, indent, ous):
 	    for x in self._kids:
@@ -42,10 +46,25 @@ class Node:
 	"""
 	Dump self as text to stream.
 	"""
-	def dump(self, indent = 0, ous = sys.stdout,):
-	    ous.write((" " * indent) + self.name + " = " + self.value + "\n")
-	
-	    self._dump_kids(indent, ous)
+	def dump(self, indent = 0, ous = sys.stdout):
+		if self.name:
+			ous.write((" " * indent) + self.name + " = " + self.value + "\n")
+		
+		self._dump_kids(indent, ous)
+
+	"""
+	Returns a lists of all the node names.
+	"""
+	def node_names(self):
+		names = []
+		
+		if self.name:
+			names.append(self.name)
+		
+		for x in self._kids:
+			names.extend(x.node_names())
+		
+		return names
 
 	"""
 	Find a given node name in a tree.
@@ -59,21 +78,6 @@ class Node:
 	    for x in self:
 	        if x.name == nodename:
 	            return x
-
-"""
-Node not containing any name=value pair.
-"""
-class EmptyNode(Node):
-	
-    def __init__(self):
-        Node.__init__(self, "","")
-
-    def dump(self, indent = 0, ous = sys.stdout):
-        ous.write("\n")
-        self._dump_kids(indent, ous)
-
-	def find_node(self, name):
-		return Node.find_node(self, name) 
 		
 if __name__ == "__main__":
 	print "This is not an executable module"		
