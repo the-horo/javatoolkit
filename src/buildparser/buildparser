@@ -20,7 +20,7 @@ from optparse import OptionParser
 
 __author__ = ["James Le Cuirot <chewi@ffaura.com>", "Karl Trygve Kalleberg <karltk@gentoo.org>"]
 __version__ = "0.1.0"
-__productname__ = "buildtool"
+__productname__ = "buildparser"
 __description__ = "A parser for build.properties and JAR manifest files."
 
 
@@ -74,12 +74,10 @@ def main():
 			t = buildproperties.parse(f)
 			
 		else:
-			print  __productname__ + ": error: Unknown file type. Specify using the -t option."
-			sys.exit()
+			sys.exit(__productname__ + ": error: Unknown file type. Specify using the -t option.")
 
 	except ParseError:
-		print __productname__ + ": error: Unable to parse file."
-		sys.exit()
+		sys.exit(__productname__ + ": error: Unable to parse file.")
 
 	if len(args) > 1:
 		n = t.find_node(args[0])

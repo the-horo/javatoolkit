@@ -20,6 +20,7 @@ def parse(ins):
 	
 	lineno = 0
 	continued_line = False
+	inside_html_comment = False
 	attrib = ""
 	value = ""
 	root = Node()
@@ -27,6 +28,16 @@ def parse(ins):
 	for x in ins.readlines():
 		lineno += 1
 		x = x.strip()
+		
+		if inside_html_comment and x.find("-->") != -1:
+			inside_html_comment = False
+			x = x.split("-->", 1)[0]
+		
+		if x.find("<!--") != -1:
+			inside_html_comment = True
+			
+		if inside_html_comment:
+			continue
 
 		if continued_line:
 			continued_line = False
