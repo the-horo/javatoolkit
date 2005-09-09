@@ -22,7 +22,7 @@ __description__ = "A parser for build.properties and JAR manifest files."
 
 def parse_args():
 
-	usage = 'buildtool [options] [node name] <filename>'
+	usage = 'buildparser [options] [node name] <filename>'
 	about = __productname__ + " : " + __description__ + "\n" + \
 		"Version : " + __version__ + "\n" \
 		"Authors : " + __author__[0]
