@@ -1,0 +1,94 @@
+#! /usr/bin/python
+#
+# Copyright(c) 2005, James Le Cuirot <chewi@ffaura.com>
+# Copyright(c) 2005, Karl Trygve Kalleberg <karltk@gentoo.org>
+#
+# Licensed under the GNU General Public License, v2
+#
+# $Header:$
+
+from javatoolkit.parser import buildproperties
+from javatoolkit.parser import manifest
+from javatoolkit.parser.tree import Node, ParseError
+
+import os
+import sys
+from optparse import OptionParser
+
+__author__ = ["James Le Cuirot <chewi@ffaura.com>", "Karl Trygve Kalleberg <karltk@gentoo.org>"]
+__version__ = "0.1.0"
+__productname__ = "buildtool"
+__description__ = "A parser for build.properties and JAR manifest files."
+
+def parse_args():
+
+	usage = 'buildtool [options] [node name] <filename>'
+	about = __productname__ + " : " + __description__ + "\n" + \
+		"Version : " + __version__ + "\n" \
+		"Authors : " + __author__[0]
+		
+	for x in __author__[1:]:
+		about += "\n          " + x
+
+	parser = OptionParser(usage, version=about)
+	parser.add_option('-t', '--type', action='store', type='choice',
+					dest='type', choices=['manifest', 'buildprops'],
+					help='Type of file to parse: manifest or buildprops')
+	
+	opt, args = parser.parse_args()
+
+	if len(args) > 2:
+		parser.error("Too many arguments specified!")
+
+	elif len(args) == 0:
+		parser.error("A filename must be specified!")
+		
+	elif not os.path.isfile(args[-1]):
+		parser.error(args[-1] + " does not exist!")
+
+	return opt, args
+
+def main():
+	
+	opt, args = parse_args()
+
+	f = open(args[-1])
+	
+	t = Node()
+	
+	try:
+		if opt.type == "manifest":
+			t = manifest.parse(f)
+	
+		elif opt.type == "buildprops":
+			t = buildproperties.parse(f)
+		
+		elif os.path.basename(f.name) == "MANIFEST.MF":
+			t = manifest.parse(f)
+		
+		elif os.path.basename(f.name) == "build.properties":
+			t = buildproperties.parse(f)
+			
+		else:
+			print  __productname__ + ": error: Unknown file type. Specify using the -t option."
+			sys.exit()
+
+	except ParseError:
+		print __productname__ + ": error: Unable to parse file."
+		sys.exit()
+
+	if len(args) > 1:
+		n = t.find_node(args[0])
+		
+		if n != None:
+			print n.value
+	
+	else:
+		for x in t.node_names():
+			print x
+
+if __name__ == '__main__':
+	try:
+		main()
+	except KeyboardInterrupt:
+		print "Interrupted by user, aborting."

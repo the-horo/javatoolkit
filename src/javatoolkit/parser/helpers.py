@@ -1,5 +1,6 @@
 #! /usr/bin/python2
 #
+# Copyright(c) 2005, James Le Cuirot <chewi@ffaura.com>
 # Copyright(c) 2004, Karl Trygve Kalleberg <karltk@gentoo.org>
 # Copyright(c) 2004, Gentoo Foundation
 #

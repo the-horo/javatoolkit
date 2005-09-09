@@ -75,9 +75,17 @@ class Node:
 	@return reference to the found node, if any
 	"""
 	def find_node(self, nodename):
-	    for x in self:
-	        if x.name == nodename:
-	            return x
+		if self.name == nodename:
+			return self
+
+		else:
+			for x in self._kids:
+				y = x.find_node(nodename)
+				
+				if y != None:
+					return y
+		
+		return None
 		
 if __name__ == "__main__":
 	print "This is not an executable module"		

@@ -1,5 +1,6 @@
 #! /usr/bin/python2
 #
+# Copyright(c) 2005, James Le Cuirot <chewi@ffaura.com>
 # Copyright(c) 2004, Karl Trygve Kalleberg <karltk@gentoo.org>
 # Copyright(c) 2004, Gentoo Foundation
 #
@@ -46,10 +47,10 @@ def parse(ins):
 		xs = x.split("=", 2)
 		
 		if len(xs) > 1:
-			attrib = xs[0]
-			value = (xs[1].strip().strip("\""))
+			attrib = xs[0].strip()
+			value = xs[1].strip().strip("\"")
 			
-			if value[-1] == "\\":
+			if value != "" and value[-1] == "\\":
 				value = value[:-1]
 				continued_line = True
 				continue
