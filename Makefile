@@ -23,10 +23,10 @@ dist: dist-javatoolkit
 dist-javatoolkit:
 	mkdir -p release/javatoolkit-$(VERSION)$(RELEASE_TAG)
 	rm -rf release/javatoolkit-$(VERSION)$(RELEASE_TAG)/
-	for x in sun-fetch findclass bsfix ; do \
+	for x in sun-fetch findclass bsfix buildparser javatoolkit ; do \
 		( cd src/$$x ; make distdir=release/javatoolkit-$(VERSION)$(RELEASE_TAG) dist ) \
 	done
-	cp {Makefile,AUTHORS,README,TODO,COPYING,NEWS,ChangeLog} release/javatoolkit-$(VERSION)$(RELEASE_TAG)/
+	cp Makefile AUTHORS README TODO COPYING NEWS ChangeLog release/javatoolkit-$(VERSION)$(RELEASE_TAG)/
 	cat makedefs.mak | \
 		sed "s/^VERSION=.*/VERSION=$(VERSION)/" | \
 		sed "s/^RELEASE_TAG=.*/RELEASE_TAG=$(RELEASE_TAG)/" \
@@ -42,8 +42,8 @@ install-javatoolkit:
 	install -d $(sbindir)
 	install -d $(mandir)
 
-	install -m 0644 {AUTHORS,ChangeLog,COPYING,NEWS,README,TODO} $(docdir)/
+	install -m 0644 AUTHORS ChangeLog COPYING NEWS README TODO $(docdir)/
 
-	for x in sun-fetch findclass bsfix ; do \
+	for x in sun-fetch findclass bsfix buildparser javatoolkit ; do \
 		( cd src/$$x ; make DESTDIR=$(DESTDIR) install )  \
 	done

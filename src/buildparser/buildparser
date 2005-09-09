@@ -7,6 +7,8 @@
 #
 # $Header:$
 
+sys.path.insert(0, "/usr/share/javatoolkit/pym")
+
 from javatoolkit.parser import buildproperties
 from javatoolkit.parser import manifest
 from javatoolkit.parser.tree import Node, ParseError
@@ -15,10 +17,12 @@ import os
 import sys
 from optparse import OptionParser
 
+
 __author__ = ["James Le Cuirot <chewi@ffaura.com>", "Karl Trygve Kalleberg <karltk@gentoo.org>"]
 __version__ = "0.1.0"
 __productname__ = "buildtool"
 __description__ = "A parser for build.properties and JAR manifest files."
+
 
 def parse_args():
 
@@ -92,3 +96,4 @@ if __name__ == '__main__':
 		main()
 	except KeyboardInterrupt:
 		print "Interrupted by user, aborting."
+
