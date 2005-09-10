@@ -7,16 +7,15 @@
 #
 # $Header:$
 
+import os
+import sys
+from optparse import OptionParser
+
 sys.path.insert(0, "/usr/share/javatoolkit/pym")
 
 from javatoolkit.parser import buildproperties
 from javatoolkit.parser import manifest
 from javatoolkit.parser.tree import Node, ParseError
-
-import os
-import sys
-from optparse import OptionParser
-
 
 __author__ = ["James Le Cuirot <chewi@ffaura.com>", "Karl Trygve Kalleberg <karltk@gentoo.org>"]
 __version__ = "0.1.0"
