@@ -19,11 +19,11 @@ class cvv:
 		self.good = []
 		self.bad = []
 
-	def add(self, version, filename):
+	def add(self, version, jar, file):
 		if version <= self.target:
-			self.good.append(("1."+str(version), filename))
+			self.good.append(("1."+str(version), jar, file))
 		else:
-			self.bad.append(("1."+str(version), filename))
+			self.bad.append(("1."+str(version), jar, file))
 
 	def do_class(self,filename):
 		classFile = file(filename,"rb")
@@ -34,7 +34,7 @@ class cvv:
 		(version,) = unpack('>xxh',temp)
 		version-=44
 
-		self.add(version, filename)
+		self.add(version, None, filename)
 	
 	def do_jar(self, filename):
 		zipfile = ZipFile(filename, 'r')
@@ -46,7 +46,7 @@ class cvv:
 				(version,) = unpack('>h',classFile[6:8])
 				version-=44
 
-				self.add(version, "%s:(%s)" % (filename, file))
+				self.add(version, filename, file)
 	
 	def do_file(self, filename):
 		if not os.path.islink(filename):
@@ -63,6 +63,7 @@ if __name__ == '__main__':
 
 		make_option ("-v", "--verbose", action="store_true", dest="verbose", default=False, help="Print version of every calss"),
 		make_option ("-s", "--silent", action="store_true", dest="silent", default=False, help="No output"),
+		make_option ("-f", "--file-only", action="store_true", dest="file_only", default=False, help="Only output the files"),
 	]
 
 	parser = OptionParser("%prog -t version [-r] [-v] [-s] <class/jar files or dir>", options_list)
@@ -85,14 +86,20 @@ if __name__ == '__main__':
 				for filename in files:
 					cvv.do_file("%s/%s" % (root, filename))
 
-	if options.verbose:
-		for set in cvv.good:
-			print "Good: %s %s" % set
-		
-	if not options.silent:
-		for set in cvv.bad:
-			print "Bad: %s %s" % set
+	if options.file_only:
+		lst = set([set[1] for set in cvv.bad])
+		for i in lst:
+			print i
+	else:
 
+		if options.verbose:
+			for set in cvv.good:
+				print "Good: %s %s %s" % set
+		
+		if not options.silent:
+			for set in cvv.bad:
+				print "Bad: %s %s %s" % set
+	
 		print "CVV: %s\nChecked: %i Good: %i Bad: %i" % (options.version, len(cvv.good)+len(cvv.bad) , len(cvv.good), len(cvv.bad))
 
 	if len(cvv.bad) > 0:
