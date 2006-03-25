@@ -1,11 +1,11 @@
-#! /usr/bin/python2
+#! /usr/bin/python
 #
 # Copyright(c) 2004, Karl Trygve Kalleberg <karltk@gentoo.org>
 # Copyright(c) 2004, Gentoo Foundation
 #
 # Licensed under the GNU General Public License, v2
 #
-# $Header: /var/cvsroot/gentoo-src/javatoolkit/src/javatoolkit/parser/__init__.py,v 1.2 2004/11/08 19:21:52 karltk Exp $
+# $Header: $
 
 from helpers import *
 import buildproperties

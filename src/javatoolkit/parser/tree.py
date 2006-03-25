@@ -1,36 +1,37 @@
-#! /usr/bin/python2
+#! /usr/bin/python
 #
+# Copyright(c) 2006, James Le Cuirot <chewi@aura-online.co.uk>
 # Copyright(c) 2004, Karl Trygve Kalleberg <karltk@gentoo.org>
 # Copyright(c) 2004, Gentoo Foundation
 #
 # Licensed under the GNU General Public License, v2
 #
-# $Header: /var/cvsroot/gentoo-src/javatoolkit/src/javatoolkit/parser/tree.py,v 1.1 2004/11/08 19:21:52 karltk Exp $
+# $Header: $
 
 import sys
 
 class ParseError:
-    def __init__(self, error):
-        self.error = error
+	def __init__(self, error):
+		self.error = error
 
 class NodeIter:
-    def __init__(self, node):
-        self._node = node
-        self._index = 0
-    def next(self):
-        self._index += 1
-        if self._index >= len(self._node._kids):
-            raise StopIteration
-        return self._node._kids[self._index]
+	def __init__(self, node):
+		self._node = node
+		self._index = 0
+	def next(self):
+		self._index += 1
+		if self._index >= len(self._node._kids):
+			raise StopIteration
+		return self._node._kids[self._index]
         
 class Node:
 	def __init__(self, name = None, value = None):
-	    self.name = name
-	    self.value = value
-	    self._kids = []
+		self.name = name
+		self.value = value
+		self._kids = []
 	
 	def __iter__(self):
-	    return NodeIter(self)
+		return NodeIter(self)
 	
 	def add_kid(self, kid):
 		for x in self._kids:
@@ -40,8 +41,8 @@ class Node:
 		self._kids.append(kid)
 	
 	def _dump_kids(self, indent, ous):
-	    for x in self._kids:
-	        x.dump(indent + 1)
+		for x in self._kids:
+			x.dump(indent + 1)
 	
 	"""
 	Dump self as text to stream.
@@ -51,6 +52,16 @@ class Node:
 			ous.write((" " * indent) + self.name + " = " + self.value + "\n")
 		
 		self._dump_kids(indent, ous)
+	
+	"""
+	Output self as text to stream using the given format.
+	"""
+	def output(self, before, between, after, ous = sys.stdout):
+		if self.name:
+			ous.write(before + self.name + between + self.value + after + "\n")
+		
+		for x in self._kids:
+			x.output(before, between, after, ous)
 
 	"""
 	Returns a lists of all the node names.

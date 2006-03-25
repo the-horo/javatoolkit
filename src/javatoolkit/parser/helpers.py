@@ -1,12 +1,12 @@
-#! /usr/bin/python2
+#! /usr/bin/python
 #
-# Copyright(c) 2005, James Le Cuirot <chewi@ffaura.com>
+# Copyright(c) 2006, James Le Cuirot <chewi@aura-online.co.uk>
 # Copyright(c) 2004, Karl Trygve Kalleberg <karltk@gentoo.org>
 # Copyright(c) 2004, Gentoo Foundation
 #
 # Licensed under the GNU General Public License, v2
 #
-# $Header: /var/cvsroot/gentoo-src/javatoolkit/src/javatoolkit/parser/helpers.py,v 1.3 2004/11/08 19:31:51 karltk Exp $
+# $Header: $
 
 
 def expand(root, expr, realroot = None):

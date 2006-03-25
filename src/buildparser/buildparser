@@ -1,6 +1,6 @@
 #! /usr/bin/python
 #
-# Copyright(c) 2005, James Le Cuirot <chewi@ffaura.com>
+# Copyright(c) 2006, James Le Cuirot <chewi@aura-online.co.uk>
 # Copyright(c) 2005, Karl Trygve Kalleberg <karltk@gentoo.org>
 #
 # Licensed under the GNU General Public License, v2
@@ -13,19 +13,20 @@ from optparse import OptionParser
 
 sys.path.insert(0, "/usr/share/javatoolkit/pym")
 
-from parser import buildproperties
-from parser import manifest
+from parser.parser import Parser
+from parser.buildproperties import BuildPropertiesParser
+from parser.manifest import ManifestParser
 from parser.tree import Node, ParseError
 
-__author__ = ["James Le Cuirot <chewi@ffaura.com>", "Karl Trygve Kalleberg <karltk@gentoo.org>"]
-__version__ = "0.1.0"
+__author__ = ["James Le Cuirot <chewi@aura-online.co.uk>", "Karl Trygve Kalleberg <karltk@gentoo.org>"]
+__version__ = "0.2.0"
 __productname__ = "buildparser"
 __description__ = "A parser for build.properties and JAR manifest files."
 
 
 def parse_args():
 
-	usage = 'buildparser [options] [node name] <filename>'
+	usage = 'buildparser [options] [node name] [replacement] <filename>'
 	about = __productname__ + " : " + __description__ + "\n" + \
 		"Version : " + __version__ + "\n" \
 		"Authors : " + __author__[0]
@@ -40,7 +41,7 @@ def parse_args():
 	
 	opt, args = parser.parse_args()
 
-	if len(args) > 2:
+	if len(args) > 3:
 		parser.error("Too many arguments specified!")
 
 	elif len(args) == 0:
@@ -58,27 +59,38 @@ def main():
 	f = open(args[-1])
 	
 	t = Node()
+	p = Parser()
 	
 	try:
 		if opt.type == "manifest":
-			t = manifest.parse(f)
+			p = ManifestParser()
 	
 		elif opt.type == "buildprops":
-			t = buildproperties.parse(f)
+			p = BuildPropertiesParser()
 		
 		elif os.path.basename(f.name) == "MANIFEST.MF":
-			t = manifest.parse(f)
+			p = ManifestParser()
 		
 		elif os.path.basename(f.name) == "build.properties":
-			t = buildproperties.parse(f)
+			p = BuildPropertiesParser()
 			
 		else:
 			sys.exit(__productname__ + ": error: Unknown file type. Specify using the -t option.")
+		
+		t = p.parse(f)
 
 	except ParseError:
 		sys.exit(__productname__ + ": error: Unable to parse file.")
+		
+	if len(args) > 2:
+		n = t.find_node(args[0])
+		
+		if n != None:
+			n.value = args[1]
+		
+		p.output(t)
 
-	if len(args) > 1:
+	elif len(args) > 1:
 		n = t.find_node(args[0])
 		
 		if n != None:
