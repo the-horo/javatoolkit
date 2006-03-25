@@ -2,11 +2,12 @@
 # Copyright 2004 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 #
-# $Header: /var/cvsroot/gentoo-src/javatoolkit/src/bsfix/Makefile,v 1.4 2005/01/02 02:30:12 axxo Exp $
+# $Header: $
 
 include ../../makedefs.mak
 
 all:
+	python -c "import compileall; compileall.compile_dir('.')"
 	
 dist:
 	mkdir -p ../../$(distdir)/src/javatoolkit/parser
@@ -15,5 +16,5 @@ dist:
 
 install: all
 	install -d $(DESTDIR)/usr/share/javatoolkit/pym/parser
-	install *.py $(DESTDIR)/usr/share/javatoolkit/pym/
-	install parser/*.py $(DESTDIR)/usr/share/javatoolkit/pym/parser/
+	install -m 0644 *.py *.pyc $(DESTDIR)/usr/share/javatoolkit/pym/
+	install -m 0644 parser/*.py parser/*.pyc $(DESTDIR)/usr/share/javatoolkit/pym/parser/
