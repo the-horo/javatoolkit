@@ -55,7 +55,7 @@ class ManifestParser(parser.Parser):
 		return root
 
 	def output(self, tree):
-		tree.output("", ": ", "");
+		tree.output("", ": ", "", ",", " ");
 
 if __name__ == "__main__":
 	print "This is not an executable module"	

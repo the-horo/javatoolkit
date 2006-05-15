@@ -56,12 +56,17 @@ class Node:
 	"""
 	Output self as text to stream using the given format.
 	"""
-	def output(self, before, between, after, ous = sys.stdout):
+	def output(self, before, between, after, wrap = None, indent = "", ous = sys.stdout):		
 		if self.name:
-			ous.write(before + self.name + between + self.value + after + "\n")
+			outval = self.value
+		
+			if wrap != None:
+				outval = outval.replace(wrap, wrap + "\n" + indent)
+			
+			ous.write(before + self.name + between + outval + after + "\n")
 		
 		for x in self._kids:
-			x.output(before, between, after, ous)
+			x.output(before, between, after, wrap, indent, ous)
 
 	"""
 	Returns a lists of all the node names.
