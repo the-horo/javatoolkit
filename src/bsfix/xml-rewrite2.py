@@ -26,6 +26,8 @@ from optparse import OptionParser, make_option
 __version__ = "$Revision: 1.7 $"[11:-2]
 
 class DomRewriter:
+	from xml.dom import NotFoundErr
+
 	def __init__(self, modifyElems, attributes, values=None, index=None):
 		self.modify = modifyElems
 		self.attributes = attributes
@@ -34,19 +36,16 @@ class DomRewriter:
 
 	def change_elem(self, elem):
 		for i,attr in enumerate(self.attributes):
-			value = self.values[i]
-			print attr,value
-			if value:
-				elem.setAttribute(attr, value)
+			if self.values:
+				elem.setAttribute(attr, self.values[i])
 			else:
 				try:
-					match.removeAttribute(attr)
-				except NotFoundErr:
+					elem.removeAttribute(attr)
+				except DomRewriter.NotFoundErr:
 					continue
 
 	def process(self,in_stream):
 		from xml.dom.minidom import parse
-		from xml.dom import NotFoundErr
 
 		self.document = parse(in_stream);
 
@@ -94,9 +93,9 @@ class ExpatRewriter:
 		self.p('<%s ' % name)
 
 		match = ( name in self.elems )
-
+		
 		for a,v in attrs.iteritems():
-			if a not in self.attributes:
+			if not ( match and a in self.attributes ):
 				self.write_attr(a,v)
 		
 		if match:
@@ -141,7 +140,7 @@ if __name__ == '__main__':
 		make_option ("-e", "--element", action="append", dest="elements", help="Tag of the element of which the attributes to be changed.  These can be chained for multiple elements."),
 		make_option ("-a", "--attribute", action="append", dest="attributes", help="Attribute of the matching elements to change. These can be chained for multiple value-attribute pairs"),
 		make_option ("-v", "--value", action="append", dest="values", help="Value to set the attribute to."),
-		make_option ("-i", "--index", type="int", dest="index", help="Index of the match.  If none is specified, the changes will be applied to all matches within the document.")
+		make_option ("-i", "--index", type="int", dest="index", help="Index of the match.  If none is specified, the changes will be applied to all matches within the document. Starts from zero.")
 	]
 
 	parser = OptionParser(usage, options_list)
@@ -170,7 +169,9 @@ if __name__ == '__main__':
 	import codecs
 	
 	def get_rewriter(options):
-		if options.index:
+		if options.index or options.doDelete:
+			# java-ant-2.eclass does not use these options so we can optimize the ExpatWriter 
+			# and let the DomRewriter do these. Also keeps the index option compatible for sure.
 			rewriter = DomRewriter(options.elements, options.attributes, options.values, options.index)
 			print "Using DOM to rewrite the build.xml files"
 		else:
