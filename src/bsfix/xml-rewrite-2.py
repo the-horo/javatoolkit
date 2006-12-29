@@ -12,6 +12,7 @@
 # ChangeLog
 # Petteri Räty <betelgeuse@gentoo.org
 #	   December 06, 2006 - Changed to use xml.parsers.expat and basically rewrote the whole file
+#	   December 29, 2006 - Added a SAX based implementation to handle entities etc ( test on dev-java/skinlf )
 # Saleem A. <compnerd@compnerd.org>
 #	   December 23, 2004 - Initial Write
 #	   December 24, 2004 - Added usage information
@@ -61,7 +62,7 @@ class DomRewriter:
 	def write(self,stream):
 		stream.write(self.document.toxml())
 
-class ExpatRewriter:
+class StreamRewriterBase:
 
 	def __init__(self, elems, attributes, values, index):
 		self.buffer = StringIO.StringIO()
@@ -70,31 +71,20 @@ class ExpatRewriter:
 		self.attributes = attributes
 		self.values = values
 
-	def process(self, in_stream):
-		from xml.parsers.expat import ParserCreate
-		parser = ParserCreate()
-
-		parser.StartElementHandler = self.start_element
-		parser.EndElementHandler = self.end_element
-		parser.CharacterDataHandler = self.char_data
-		parser.ParseFile(in_stream)
-		self.p('\n')
 
 	def write(self, out_stream):
 		out_stream.write(self.buffer.getvalue())
-		self.buffer.close()
-		self.buffer = StringIO.StringIO()
-		self.p = self.buffer.write
+		self.buffer.truncate(0)
 
 	def write_attr(self,a,v):
-		self.buffer.write('%s=%s ' % (a,quoteattr(v)))
+		self.buffer.write('%s=%s ' % (a,quoteattr(v, {u'©':'&#169;'})))
 
 	def start_element(self, name, attrs):
 		self.p('<%s ' % name)
 
 		match = ( name in self.elems )
 		
-		for a,v in attrs.iteritems():
+		for a,v in attrs:
 			if not ( match and a in self.attributes ):
 				self.write_attr(a,v)
 		
@@ -104,11 +94,44 @@ class ExpatRewriter:
 
 		self.p('>')
 
+class ExpatRewriter(StreamRewriterBase):
+	"""
+	The only problem with this Expat based implementation is that it does not
+	handle entities doctypes etc properly so for example dev-java/skinlf fails.
+	"""
+	def process(self, in_stream):
+		from xml.parsers.expat import ParserCreate
+		parser = ParserCreate()
+
+		parser.StartElementHandler = self.start_element
+		parser.EndElementHandler = self.end_element
+		parser.CharacterDataHandler = self.char_data
+		parser.ParseFile(in_stream)
+		self.p('\n')
+	
+	def start_element(self, name, attrs):
+		StreamRewriterBase(self, name, attrs.iteritems())
+
 	def end_element(self,name):
 		self.p('</%s>' % name)
 
 	def char_data(self,data):
 		self.p(escape(data))
+
+from xml.sax.saxutils import XMLGenerator
+class SaxRewriter(XMLGenerator, StreamRewriterBase):
+
+	def __init__(self, elems, attributes, values, index):
+		StreamRewriterBase.__init__(self, elems, attributes, values, index)
+		XMLGenerator.__init__(self, self.buffer, 'UTF-8')
+
+	def process(self, in_stream):
+		from xml.sax import parse
+		parse(in_stream, self)
+		self.p('\n')
+
+	def startElement(self, name, attrs):
+		self.start_element(name, attrs.items())
 
 if __name__ == '__main__':
 	usage = "XML Rewrite Python Module Version " + __version__ + "\n"
@@ -175,8 +198,8 @@ if __name__ == '__main__':
 			rewriter = DomRewriter(options.elements, options.attributes, options.values, options.index)
 			print "Using DOM to rewrite the build.xml files"
 		else:
-			rewriter = ExpatRewriter(options.elements, options.attributes, options.values, options.index)
-			print "Using Expat to rewrite the build.xml files"
+			rewriter = SaxRewriter(options.elements, options.attributes, options.values, options.index)
+			print "Using Sax to rewrite the build.xml files"
 
 		return rewriter
 	
