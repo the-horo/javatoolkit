@@ -3,9 +3,10 @@
 
 # Copyright 2004-2006 Gentoo Foundation
 # Distributed under the terms of the GNU General Public Licence v2
-# $Header: /var/cvsroot/gentoo-src/javatoolkit/src/bsfix/xml-rewrite.py,v 1.6 2005/07/19 10:35:18 axxo Exp $
 
-# Author: Saleem Abdulrasool <compnerd@compnerd.org>
+# Authors: 
+#	Saleem Abdulrasool <compnerd@compnerd.org>
+#	Petteri Räty <betelgeuse@gentoo.org>
 # Maintainer: Gentoo Java Herd <java@gentoo.org>
 # Python based XML modifier
 
@@ -27,6 +28,11 @@ from optparse import OptionParser, make_option
 __version__ = "$Revision: 1.7 $"[11:-2]
 
 class DomRewriter:
+	"""
+	The old DOM rewriter is still around for index based stuff. It can
+	be used for all the complex stuff but portage needed features should
+	be in StreamRewriterBase subclasses as they are much faster.
+	"""
 	from xml.dom import NotFoundErr
 
 	def __init__(self, modifyElems, attributes, values=None, index=None):
@@ -66,21 +72,24 @@ class StreamRewriterBase:
 
 	def __init__(self, elems, attributes, values, index):
 		self.buffer = StringIO.StringIO()
-		self.p = self.buffer.write
+		self.__write = self.buffer.write
 		self.elems = elems
 		self.attributes = attributes
 		self.values = values
 
+	def p(self,str):
+		self.__write(str.encode('utf8'))
 
 	def write(self, out_stream):
-		out_stream.write(self.buffer.getvalue())
+		value = self.buffer.getvalue()
+		out_stream.write(value)
 		self.buffer.truncate(0)
 
 	def write_attr(self,a,v):
-		self.buffer.write('%s=%s ' % (a,quoteattr(v, {u'©':'&#169;'})))
+		self.p(u'%s=%s ' % (a,quoteattr(v, {u'©':'&#169;'})))
 
 	def start_element(self, name, attrs):
-		self.p('<%s ' % name)
+		self.p(u'<%s ' % name)
 
 		match = ( name in self.elems )
 		
@@ -92,7 +101,7 @@ class StreamRewriterBase:
 			for i, attr in enumerate(self.attributes):
 				self.write_attr(attr, self.values[i])
 
-		self.p('>')
+		self.p(u'>')
 
 class ExpatRewriter(StreamRewriterBase):
 	"""
@@ -107,20 +116,23 @@ class ExpatRewriter(StreamRewriterBase):
 		parser.EndElementHandler = self.end_element
 		parser.CharacterDataHandler = self.char_data
 		parser.ParseFile(in_stream)
-		self.p('\n')
+		self.p(u'\n')
 	
 	def start_element(self, name, attrs):
 		StreamRewriterBase(self, name, attrs.iteritems())
 
 	def end_element(self,name):
-		self.p('</%s>' % name)
+		self.p(u'</%s>' % name)
 
 	def char_data(self,data):
 		self.p(escape(data))
 
 from xml.sax.saxutils import XMLGenerator
 class SaxRewriter(XMLGenerator, StreamRewriterBase):
-
+	"""
+	Using Sax gives us the support for writing back doctypes and all easily
+	and is only marginally slower than expat as it is just a tight layer over it
+	"""
 	def __init__(self, elems, attributes, values, index):
 		StreamRewriterBase.__init__(self, elems, attributes, values, index)
 		XMLGenerator.__init__(self, self.buffer, 'UTF-8')
@@ -128,7 +140,7 @@ class SaxRewriter(XMLGenerator, StreamRewriterBase):
 	def process(self, in_stream):
 		from xml.sax import parse
 		parse(in_stream, self)
-		self.p('\n')
+		self.p(u'\n')
 
 	def startElement(self, name, attrs):
 		self.start_element(name, attrs.items())
@@ -189,8 +201,6 @@ if __name__ == '__main__':
 		error("You must give value for every attribute you are changing.")
 	# End Invalid Arguments Check
 	
-	import codecs
-	
 	def get_rewriter(options):
 		if options.index or options.doDelete:
 			# java-ant-2.eclass does not use these options so we can optimize the ExpatWriter 
@@ -206,15 +216,24 @@ if __name__ == '__main__':
 	rewriter = get_rewriter(options)
 
 	if options.files:
+		import os
 		for file in options.files:
 			print "Rewriting %s" % file
-			f = open(file,"r")
+			# First parse the file into memory
+			# Tricks with cwd are needed for relative includes of other xml files to build.xml files
+			cwd = os.getcwd()
+			dirname = os.path.dirname(file)
+			if dirname != '': # for file = build.xml comes out as ''
+				os.chdir(os.path.dirname(file))
+			f = open(os.path.basename(file),"r")
 			rewriter.process(f)
+			os.chdir(cwd)
 			f.close()		
+			# Then write it back to the file
 			f = open(file, "w")
-			rewriter.write(codecs.getwriter('utf-8')(f))
+			rewriter.write(f)
 			f.close()
 	else:
 		rewriter.process(sys.stdin)
-		rewriter.write(codecs.getwriter('utf-8')(sys.stdout))
+		rewriter.write(sys.stdout)
 
