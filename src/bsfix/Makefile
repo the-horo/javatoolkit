@@ -20,3 +20,16 @@ install: all
 	install -m 0755 xml-rewrite-2.py ${bindir}/
 	install -m 0755 class-version-verify.py ${bindir}/
 
+testdir:=tests
+
+test:
+	# Dom based stuff
+	cat $(testdir)/build.xml | ./xml-rewrite-2.py -g > /dev/null
+	# Sax based stuff
+	cat $(testdir)/build.xml | ./xml-rewrite-2.py \
+		--change -e javac -e xjavac -a classpath -v '$${gentoo.classpath}' | grep gentoo.classpath > /dev/null
+	cp $(testdir)/build.xml $(testdir)/test.xml
+	./xml-rewrite-2.py -f $(testdir)/test.xml \
+		--change -e javac -e xjavac -a classpath -v '$${gentoo.classpath}'
+	grep gentoo.classpath $(testdir)/test.xml > /dev/null
+	rm $(testdir)/test.xml

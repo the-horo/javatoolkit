@@ -1,0 +1,247 @@
+<?xml version="1.0"?>
+<project basedir="." default="lib">
+	<target name="init">
+    <!-- 
+      Default values for most properties. Module specific settings are made
+      in build-default.properties, local overrides go into build.properties
+    -->
+    <property file="${user.home}/.${ant.project.name}-build.properties"/>
+    <property file="${user.home}/.build.properties"/>
+    <property file="build.properties"/>
+    <property file="build-default.properties"/>
+    <property name="module.name" value="${ant.project.name}" />
+    
+    <property name="lib.dir" value="${dist.root}/lib" />
+    <property name="build.lib.dir" value="${dist.root}/build-lib" />
+    <property name="lib-test.dir" value="${dist.root}/tests" />
+    <property name="src.dir" value="src" />
+    <property name="test.dir" value="tests" />
+    <property name="build.dir" value="build" />
+    <property name="doc.dir" value="doc" />
+    <property name="lib-doc.dir" value="${dist.root}/doc" />
+    
+    <property name="module.jar" value="${lib.dir}/${module.name}.jar" />
+    
+    <property name="build.classes" value="${build.dir}/classes" />
+    <property name="build.debug" value="on" />
+    <property name="build.optimize" value="off" />
+    <property name="build.compiler" value="modern" />
+    
+    <property name="test.classes" value="${build.dir}/tests" />
+    <property name="test.results" value="${build.dir}/testresults" />
+    <property name="test.jar" value="${lib-test.dir}/${module.name}-tests.jar" />    
+    <property name="javadoc.packages" value="*" />
+    <property name="javadoc.dir" value="${doc.dir}/api" />
+    <property name="javadoc.bottom" value="Copyright &amp;copy; ${module.year} ${module.contributor}. All Rights reserved." />
+    <property name="javadoc.title" value="${module.fullname} ${module.version} API" />
+    <property name="javadoc.windowtitle" value="${javadoc.title}" />
+    <property name="javadoc.omitindex" value="false" />
+    <property name="javadoc.splitindex" value="true" />
+    <property name="javadoc.showauthor" value="true" />
+    <property name="javadoc.showuse" value="true" />
+    <property name="javadoc.showversion" value="true" />
+    <property name="javadoc.zip" value="${lib-doc.dir}/${module.name}.zip" />
+    
+    <property name="clean.backup-pattern" value="**/*~,**/*.bak" />
+
+
+    <!-- Automatically disable all test related targets if we don't have
+         a test source directory -->
+    <condition property="test.skip">
+      <not>
+        <available file="${test.dir}" />
+      </not>
+    </condition>
+    
+    <!-- Class paths for use in building and testing -->
+    <path id="module.classpath">
+      <pathelement path="${build.classes}"/>
+      <fileset dir="${lib.dir}"
+	       includes="${module.depends}"
+	       excludes="${module.jar}" />
+      <fileset dir="${build.lib.dir}"
+	       includes="${module.depends}"
+	       excludes="${module.jar}" />
+    </path>
+  
+    <path id="test.classpath">
+      <path refid="module.classpath" />
+      <pathelement path="${test.classes}" />
+      <!-- Include the test source dir so that we can find test data and
+           the like via getResource() -->
+      <pathelement path="${test.dir}" />
+      <!-- finally, include all of the junit stuff -->
+      <pathelement path="${build.lib.dir}/junit.jar" />
+      <pathelement path="${build.lib.dir}/junit-ext.jar" />
+      <pathelement path="${build.lib.dir}/junit-tivano.jar" />
+    </path>
+
+    <!-- redefine the junit task so that it uses the provided junit.jar -->
+    <!--<taskdef classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" name="junit">
+      <classpath>
+        <pathelement path="${build.lib.dir}/junit.jar"/>
+        <pathelement path="${build.lib.dir}/ant-optional.jar"/>
+      </classpath>
+    </taskdef>-->
+  </target>
+  
+  <target name="all" depends="init,clean,compile,tests,dist"
+	  description="Build everything: clean, compile, tests, lib, javadoc, dist">
+  </target>
+
+  <target name="distclean" depends="clean-dist"
+	  description="Alias for 'clean-dist'" />
+  
+  
+  <target name="compile" depends="init"
+	  description="Compile the source files">
+    <mkdir dir="${build.classes}" />
+    <javac srcdir="${src.dir}"
+	   destdir="${build.classes}"
+	   debug="${build.debug}"
+	   optimize="${build.optimize}"
+	   includes="${build.includes}"
+	   excludes="${build.excludes}">
+      <classpath refid="module.classpath"/>
+    </javac>
+  </target>
+
+  <target name="lib" depends="init,compile"
+	  description="Build the module .jar file">
+  	<tstamp/>
+  	<delete file="${module.jar}"/>
+    <jar jarfile="${module.jar}">
+      <fileset file="${dist.root}/../LICENSE-xmlc"/>
+      <fileset dir="${build.classes}" />
+      <fileset dir="${src.dir}"
+	       includes="${module.lib.extra.includes}"
+	       excludes="${module.lib.extra.excludes}" />
+      <manifest>
+        <attribute name="Built-By" value="${user.name}"/>
+        <attribute name="Built-On" value="${TODAY}"/>
+        <section name="org/enhydra/xml/xmlc/taskdef/">
+          <attribute name="Specification-Title" value="Enhydra XMLC Ant Task"/>
+          <attribute name="Specification-Version" value="${module.version}"/>
+          <attribute name="Specification-Vendor" value="ObjectWeb Consortium"/>
+          <attribute name="Implementation-Title" value="org.enhydra.xml.xmlc.taskdef"/>
+          <attribute name="Implementation-Version" value="${module.version}"/> 
+          <attribute name="Implementation-Vendor" value="ObjectWeb Consortium"/>
+          <attribute name="Implementation-Vendor-Id" value="org.objectweb"/>
+          <attribute name="Implementation-URL" value="http://www.enhydra.org/tech/xmlc/"/>
+        </section>
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="lib-tests" depends="init,compile-tests" unless="test.skip"
+	  description="Build the unit test .jar file">
+    <jar jarfile="${test.jar}">
+      <fileset dir="${test.classes}" />
+      <fileset dir="${test.dir}"
+	       includes="${test.lib.extra.includes}"
+	       excludes="${test.lib.extra.excludes}" />
+    </jar>
+  </target>
+
+  <target name="compile-tests" depends="init,compile" unless="test.skip"
+	  description="Compile the JUnit unit tests">
+    <mkdir dir="${test.classes}" />
+    <javac srcdir="${test.dir}"
+	   destdir="${test.classes}"
+	   debug="${build.debug}"
+	   optimize="${build.optimize}" >
+      <classpath refid="test.classpath"/>
+    </javac>
+  </target>
+
+  <target name="tests" depends="init,compile-tests" unless="test.skip"
+	  description="Compile and run the JUnit unit tests">
+    <mkdir dir="${test.results}"/>
+    <junit haltonfailure="no" printsummary="yes">
+      <classpath refid="test.classpath" />
+      <formatter type="plain"/>
+      <batchtest fork="yes" todir="${test.results}">
+        <fileset dir="${test.dir}">
+	  <include name="**/*Test.java"/>
+	</fileset>
+      </batchtest>
+    </junit>
+  </target>
+
+  <target name="javadoc" depends="init"
+	  description="Build the API documentation">
+    <mkdir dir="${javadoc.dir}"/>
+
+    <condition property="javadoc.breakiterator" value="-breakiterator" >
+      <or>
+        <equals arg1="${ant.java.version}" arg2="1.4" />
+        <equals arg1="${ant.java.version}" arg2="1.5" />
+      </or>
+    </condition>
+    <property name="javadoc.breakiterator" value="" />
+    <condition property="javadoc.jdk.href" value="http://java.sun.com/products/jdk/1.2/docs/api/">
+        <equals arg1="${ant.java.version}" arg2="1.2" />
+    </condition>
+    <condition property="javadoc.jdk.href" value="http://java.sun.com/j2se/1.3/docs/api/">
+        <equals arg1="${ant.java.version}" arg2="1.3" />
+    </condition>
+    <condition property="javadoc.jdk.href" value="http://java.sun.com/j2se/1.4/docs/api/">
+        <equals arg1="${ant.java.version}" arg2="1.4" />
+    </condition>
+    <condition property="javadoc.jdk.href" value="http://java.sun.com/j2se/1.5/docs/api/">
+        <equals arg1="${ant.java.version}" arg2="1.5" />
+    </condition>
+    <property name="javadoc.jdk.href" value="" />
+
+    <javadoc author="${javadoc.showauthor}" 
+             bottom="${javadoc.bottom}" 
+             destdir="${javadoc.dir}" 
+	     doctitle="${javadoc.title}" 
+             noindex="${javadoc.omitindex}" 
+             packagenames="${javadoc.packages}" 
+             splitindex="${javadoc.splitindex}" 
+             use="${javadoc.showuse}" 
+             version="${javadoc.showversion}" 
+             windowtitle="${javadoc.windowtitle}"
+             package="true"
+             additionalparam="${javadoc.breakiterator}" >
+      <link offline="true" href="${javadoc.url.xml-apis}" packagelistLoc="${javadoc.packagelistLoc.base}/xml-apis" />
+      <link offline="true" href="${javadoc.jdk.href}" packagelistLoc="${javadoc.packagelistLoc.base}/java" />
+      <classpath refid="module.classpath" />
+      <sourcepath>
+	<pathelement path="${src.dir}"/>
+      </sourcepath>
+    </javadoc>
+  </target>
+
+  <target name="dist" depends="init,lib,lib-tests,javadoc"
+	  description="Package up the library, unit tests and documentation">
+    <zip basedir="${doc.dir}" zipfile="${javadoc.zip}" />
+  </target>
+
+  <target name="clean" depends="init"
+	  description="Remove .class and backup files">
+    <delete dir="${build.classes}" />
+    <delete dir="${test.classes}" />
+    <delete>
+      <fileset defaultexcludes="no" dir=""
+	       includes="${clean.backup-pattern}" />
+    </delete>
+  </target>
+
+  <target name="clean-dist" depends="init,clean"
+	  description="Remove all generated and backup files">
+    <delete includeEmptyDirs="true" quiet="true">
+       <fileset dir="${doc.dir}" includes="**/*" />
+    </delete>
+    <delete dir="${test.results}" />
+    <delete file="${module.jar}" />
+    <delete file="${test.jar}" />
+    <delete file="${javadoc.zip}" />
+  </target>
+  
+  <target name="dtd" 
+	  description="Regenerate the DTD for this build file">
+    <antstructure output="project.dtd" />
+  </target>
+</project>

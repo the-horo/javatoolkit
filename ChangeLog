@@ -1,3 +1,8 @@
+2007-13-03 20:10  Petteri Räty <betelgeuse@gentoo.org> 
+   
+    * src/bsfix/Makefile, src/bsfix/tests, src/bsfix/tests/build.xml:
+      Add some unit test for the build.xml rewriter.
+
 2007-13-03 20:07  Petteri Räty <betelgeuse@gentoo.org>
 
 	* src/bsfix/xml-rewrite-2.py, ChangeLog:
