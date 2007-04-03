@@ -265,7 +265,7 @@ if __name__ == '__main__':
 			f.close()
 	else:
 		if options.gentoo_classpath:
-			rewriter.process(sys.stdin)
+			rewriter.process(sys.stdin,add_gentoo_classpath)
 		else:
 			rewriter.process(sys.stdin)
 		rewriter.write(sys.stdout)
