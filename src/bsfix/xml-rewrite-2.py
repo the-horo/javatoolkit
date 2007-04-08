@@ -4,7 +4,7 @@
 # Copyright 2004-2006 Gentoo Foundation
 # Distributed under the terms of the GNU General Public Licence v2
 
-# Authors: 
+# Authors:
 #	Saleem Abdulrasool <compnerd@compnerd.org>
 #	Petteri Räty <betelgeuse@gentoo.org>
 # Maintainer: Gentoo Java Herd <java@gentoo.org>
@@ -117,11 +117,11 @@ class StreamRewriterBase:
 		self.p(u'<%s ' % name)
 
 		match = ( name in self.elems )
-		
+
 		for a,v in attrs:
 			if not ( match and a in self.attributes ):
 				self.write_attr(a,v)
-		
+
 		if match:
 			for i, attr in enumerate(self.attributes):
 				self.write_attr(attr, self.values[i])
@@ -142,7 +142,7 @@ class ExpatRewriter(StreamRewriterBase):
 		parser.CharacterDataHandler = self.char_data
 		parser.ParseFile(in_stream)
 		self.p(u'\n')
-	
+
 	def start_element(self, name, attrs):
 		StreamRewriterBase(self, name, attrs.iteritems())
 
@@ -195,7 +195,7 @@ if __name__ == '__main__':
 #	 if len(sys.argv) == 1:
 #		 usage(True)
 
-	options_list = [ 
+	options_list = [
 		make_option ("-f", "--file", action="append", dest="files", help="Transform files instead of operating on stdout and stdin"),
 		make_option ("-g", "--gentoo-classpath", action="store_true", dest="gentoo_classpath", help="Rewrite build.xml to use gentoo.classpath where applicable."),
 		make_option ("-c", "--change", action="store_true", dest="doAdd", default=False, help="Change the value of an attribute.  If it does not exist, it will be created."),
@@ -225,21 +225,21 @@ if __name__ == '__main__':
 
 		if options.doAdd and not options.values:
 			error("You must specify values for the attributes to be modified.")
-		
+
 		if options.doAdd and len(options.values) != len(options.attributes):
 			error("You must give value for every attribute you are changing.")
 	# End Invalid Arguments Check
-	
+
 	def get_rewriter(options):
 		if options.index or options.doDelete or options.gentoo_classpath:
-			# java-ant-2.eclass does not use these options so we can optimize the ExpatWriter 
+			# java-ant-2.eclass does not use these options so we can optimize the ExpatWriter
 			# and let the DomRewriter do these. Also keeps the index option compatible for sure.
 			rewriter = DomRewriter(options.elements, options.attributes, options.values, options.index)
 		else:
 			rewriter = SaxRewriter(options.elements, options.attributes, options.values, options.index)
 
 		return rewriter
-	
+
 	rewriter = get_rewriter(options)
 
 	if options.files:
@@ -258,7 +258,7 @@ if __name__ == '__main__':
 			else:
 				rewriter.process(f)
 			os.chdir(cwd)
-			f.close()		
+			f.close()
 			# Then write it back to the file
 			f = open(file, "w")
 			rewriter.write(f)
