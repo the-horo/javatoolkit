@@ -26,7 +26,7 @@ dist-javatoolkit:
 	for x in sun-fetch findclass bsfix buildparser javatoolkit ; do \
 		( cd src/$$x ; $(MAKE) distdir=release/javatoolkit-$(VERSION)$(RELEASE_TAG) dist ) \
 	done
-	cp Makefile AUTHORS README TODO COPYING NEWS ChangeLog release/javatoolkit-$(VERSION)$(RELEASE_TAG)/
+	cp Makefile AUTHORS README TODO COPYING NEWS ChangeLog.2004 release/javatoolkit-$(VERSION)$(RELEASE_TAG)/
 	cat makedefs.mak | \
 		sed "s/^VERSION=.*/VERSION=$(VERSION)/" | \
 		sed "s/^RELEASE_TAG=.*/RELEASE_TAG=$(RELEASE_TAG)/" \
