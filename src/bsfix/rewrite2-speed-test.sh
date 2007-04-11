@@ -30,9 +30,9 @@ old() {
 
 new(){
     ${NEWPATH}/xml-rewrite-2.py ${files} \
-    -c --source-element ${JAVA_PKG_BSFIX_SOURCE_TAGS// / -e } \
+    -c --source-element ${JAVA_PKG_BSFIX_SOURCE_TAGS// / --source_elements } \
 	--source-attribute source --source-value ${want_source} \
-	--target-element   ${JAVA_PKG_BSFIX_TARGET_TAGS// / -e }  \
+	--target-element   ${JAVA_PKG_BSFIX_TARGET_TAGS// / --target_elements}  \
 	--target-attribute target --target-value ${want_target} \
 	${output}  
 }
