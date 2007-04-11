@@ -5,7 +5,9 @@ JAVA_PKG_BSFIX_SOURCE_TAGS=${JAVA_PKG_BSFIX_SOURCE_TAGS:-"javadoc javac xjavac j
 
 want_source="java-1.4"
 want_target="java-1.5"
-rpath="./xmls"
+
+NEWPATH="./" # TODO: CHANGEME
+rpath="./xmls"  # TODO: CHANGEME 
 
 for i in $(ls $rpath/b*);
 do
@@ -27,8 +29,8 @@ old() {
 }
 
 new(){
-	/home/kiorky/prog/svn/gentoo.org/gentoo-java-overlays/projects/javatoolkit/trunk/src/bsfix/xml-rewrite-2.py ${files} \
-	-c --source-element ${JAVA_PKG_BSFIX_SOURCE_TAGS// / -e } \
+    ${NEWPATH}/xml-rewrite-2.py ${files} \
+    -c --source-element ${JAVA_PKG_BSFIX_SOURCE_TAGS// / -e } \
 	--source-attribute source --source-value ${want_source} \
 	--target-element   ${JAVA_PKG_BSFIX_TARGET_TAGS// / -e }  \
 	--target-attribute target --target-value ${want_target} \
