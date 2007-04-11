@@ -44,8 +44,8 @@ def add_gentoo_classpath(document):
 					gcp.setAttribute("path","${gentoo.classpath}")
 					ref.appendChild(gcp)
 					handled_refs.add(id)
-		else:
-			match.appendChild(gcp)
+				else:
+					match.appendChild(gcp)
 
 class DomRewriter:
 	"""
