@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
+# vim: set ai ts=8 sts=0 sw=8 tw=0 noexpandtab:
 
 # Copyright 2004-2006 Gentoo Foundation
 # Distributed under the terms of the GNU General Public Licence v2
@@ -95,12 +96,20 @@ class DomRewriter:
 
 class StreamRewriterBase:
 
-	def __init__(self, elems, attributes, values, index):
+	def __init__(self, elems, attributes, values, index,
+	      sourceElems = [], sourceAttributes = [], sourceValues = [],
+	      targetElems = [], targetAttributes = [], targetValues = []  ):
 		self.buffer = StringIO.StringIO()
 		self.__write = self.buffer.write
-		self.elems = elems
-		self.attributes = attributes
-		self.values = values
+		self.elems = elems		or []
+		self.attributes = attributes	or []
+		self.values = values		or []
+		self.sourceElems = sourceElems	or []
+		self.sourceAttributes = sourceAttributes	or []
+		self.sourceValues = sourceValues		or []
+		self.targetElems = targetElems			or []
+		self.targetAttributes = targetAttributes	or []
+		self.targetValues = targetValues		or []
 
 	def p(self,str):
 		self.__write(str.encode('utf8'))
@@ -117,10 +126,24 @@ class StreamRewriterBase:
 		self.p(u'<%s ' % name)
 
 		match = ( name in self.elems )
+		matchSource = ( name in self.sourceElems )
+		matchTarget = ( name in self.targetElems )
 
 		for a,v in attrs:
-			if not ( match and a in self.attributes ):
+			if not (
+				(match and a in self.attributes)
+				or (matchSource and a in self.sourceAttributes)
+				or (matchTarget and a in self.targetAttributes)
+			):
 				self.write_attr(a,v)
+
+		if matchSource:
+			for i, attr in enumerate(self.sourceAttributes):
+				self.write_attr(attr, self.sourceValues[i])
+
+		if matchTarget:
+			for i, attr in enumerate(self.targetAttributes):
+				self.write_attr(attr, self.targetValues[i])
 
 		if match:
 			for i, attr in enumerate(self.attributes):
@@ -158,8 +181,12 @@ class SaxRewriter(XMLGenerator, StreamRewriterBase):
 	Using Sax gives us the support for writing back doctypes and all easily
 	and is only marginally slower than expat as it is just a tight layer over it
 	"""
-	def __init__(self, elems, attributes, values, index):
-		StreamRewriterBase.__init__(self, elems, attributes, values, index)
+	def __init__(self, elems, attributes, values, index,
+	      sourceElems = [], sourceAttributes = [], sourceValues = [],
+	      targetElems = [], targetAttributes = [], targetValues = []):
+		StreamRewriterBase.__init__(self, elems, attributes, values, index,
+			      sourceElems, sourceAttributes, sourceValues,
+			      targetElems, targetAttributes, targetValues)
 		XMLGenerator.__init__(self, self.buffer, 'UTF-8')
 
 	def process(self, in_stream):
@@ -192,8 +219,8 @@ if __name__ == '__main__':
 		sys.exit(1)
 
 
-#	 if len(sys.argv) == 1:
-#		 usage(True)
+#	if len(sys.argv) == 1:
+#		usage(True)
 
 	options_list = [
 		make_option ("-f", "--file", action="append", dest="files", help="Transform files instead of operating on stdout and stdin"),
@@ -203,6 +230,12 @@ if __name__ == '__main__':
 		make_option ("-e", "--element", action="append", dest="elements", help="Tag of the element of which the attributes to be changed.  These can be chained for multiple elements."),
 		make_option ("-a", "--attribute", action="append", dest="attributes", help="Attribute of the matching elements to change. These can be chained for multiple value-attribute pairs"),
 		make_option ("-v", "--value", action="append", dest="values", help="Value to set the attribute to."),
+		make_option ("-r", "--source-element", action="append", dest="source_elements", help="Tag of the element of which the attributes to be changed just in source scope.  These can be chained for multiple elements."),
+		make_option ("-t","--source-attribute", action="append", dest="source_attributes", help="Attribute of the matching elements to change. These can be chained for multiple value-attribute pairs (for source only)"),
+		make_option ("-y", "--source-value", action="append", dest="source_values", help="Value to set the attribute to. (sourceonly)"),
+		make_option ("-j", "--target-element", action="append", dest="target_elements", help="Tag of the element of which the attributes to be changed just in target scope.  These can be chained for multiple elements."),
+		make_option ("-k", "--target-attribute", action="append", dest="target_attributes", help="Attribute of the matching elements to change. These can be chained for multiple value-attribute pairs (for targetonly)"),
+		make_option ("-l", "--target-value", action="append", dest="target_values", help="Value to set the attribute to (targeronly)."),
 		make_option ("-i", "--index", type="int", dest="index", help="Index of the match.  If none is specified, the changes will be applied to all matches within the document. Starts from zero.")
 	]
 
@@ -220,14 +253,22 @@ if __name__ == '__main__':
 		if options.doAdd and options.doDelete:
 			error("Unable to perform multiple actions simultaneously.")
 
-		if not options.elements or not options.attributes:
-			error("At least one element and attribute must be specified.")
+		if not options.elements and not options.target_elements and not options.source_elements:
+			error("At least one element (global, source only or target only) and attribute must be specified.")
 
-		if options.doAdd and not options.values:
-			error("You must specify values for the attributes to be modified.")
+		for elem in ( options.source_attributes or [] ):
+			if elem in ( options.attributes or [] ):
+				error("You can't set an attribute in global and source scope at the same time")
 
-		if options.doAdd and len(options.values) != len(options.attributes):
-			error("You must give value for every attribute you are changing.")
+		for elem in ( options.target_attributes or [] ):
+			if elem in ( options.attributes or [] ):
+				error("You can't set an attribute in global and target scope at the same time")
+
+		if options.doAdd and (len(options.values or []) != len(options.attributes or [])
+			or len(options.source_values or [] ) != len(options.source_attributes or [])
+			or len(options.target_values or [] ) != len(options.target_attributes or [])):
+			error("You must give attribute(s)/value(s) for every element you are changing.")
+
 	# End Invalid Arguments Check
 
 	def get_rewriter(options):
@@ -236,7 +277,9 @@ if __name__ == '__main__':
 			# and let the DomRewriter do these. Also keeps the index option compatible for sure.
 			rewriter = DomRewriter(options.elements, options.attributes, options.values, options.index)
 		else:
-			rewriter = SaxRewriter(options.elements, options.attributes, options.values, options.index)
+			rewriter = SaxRewriter(options.elements, options.attributes, options.values, options.index,
+			  options.source_elements, options.source_attributes, options.source_values,
+			  options.target_elements, options.target_attributes, options.target_values)
 
 		return rewriter
 
@@ -252,21 +295,25 @@ if __name__ == '__main__':
 			dirname = os.path.dirname(file)
 			if dirname != '': # for file = build.xml comes out as ''
 				os.chdir(os.path.dirname(file))
+
 			f = open(os.path.basename(file),"r")
 			if options.gentoo_classpath:
 				rewriter.process(f,add_gentoo_classpath)
 			else:
 				rewriter.process(f)
+
 			os.chdir(cwd)
 			f.close()
 			# Then write it back to the file
 			f = open(file, "w")
 			rewriter.write(f)
 			f.close()
+
 	else:
 		if options.gentoo_classpath:
 			rewriter.process(sys.stdin,add_gentoo_classpath)
 		else:
 			rewriter.process(sys.stdin)
+
 		rewriter.write(sys.stdout)
 
