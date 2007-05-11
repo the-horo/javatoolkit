@@ -14,7 +14,7 @@ all:
 	echo $(bindir)
 	echo $(sbindir)
 	echo $(mandir)
-	for x in bsfix; do \
+	for x in bsfix maven; do \
 		( cd src/$$x; $(MAKE) all ) \
 	done
 
