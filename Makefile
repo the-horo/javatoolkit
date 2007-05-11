@@ -42,7 +42,7 @@ install-javatoolkit:
 	install -d $(sbindir)
 	install -d $(mandir)
 
-	install -m 0644 AUTHORS ChangeLog COPYING NEWS README TODO $(docdir)/
+	install -m 0644 AUTHORS ChangeLog.2004 COPYING NEWS README TODO $(docdir)/
 
 	for x in sun-fetch findclass bsfix buildparser javatoolkit maven; do \
 		( cd src/$$x ; $(MAKE) DESTDIR=$(DESTDIR) install )  \
