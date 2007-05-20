@@ -9,10 +9,10 @@ all:
 
 dist:
 	mkdir -p ../../$(distdir)/src/maven
-	cp Makefile maven-getpominfos.py ../../$(distdir)/src/maven
+	cp Makefile maven-helper.py ../../$(distdir)/src/maven
 
 install: all
-	install -m 0755 maven-getpominfos.py $(bindir)/
+	install -m 0755 maven-helper.py $(bindir)/
 
 testdir:=tests
 

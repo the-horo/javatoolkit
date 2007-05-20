@@ -51,11 +51,11 @@ class MavenPom:
 			# get our properties
 			for node in self.project.childNodes:
 				self.getInfos(node)
-				if node.nodeName == "dependencies": 
-					for dependency_node in node.childNodes: 
-						if dependency_node.nodeName == "dependency":  
+				if node.nodeName == "dependencies":
+					for dependency_node in node.childNodes:
+						if dependency_node.nodeName == "dependency":
 							dep = MavenPom()
-							for child_node in dependency_node.childNodes:  
+							for child_node in dependency_node.childNodes:
 								dep.getInfos(child_node)
                                                         self.dependencies.append(dep)
 
@@ -79,7 +79,7 @@ if __name__ == '__main__':
 	usage += "Please contact the Gentoo Java Team <java@gentoo.org> with problems.\n"
 	usage += "\n"
 	usage += "Usage:\n"
-	usage += "  maven-getpominfos.py [-a] [-v] [-g] [-d] [-f fic.xml]\n"
+	usage += "  maven-helper.py [-a] [-v] [-g] [-d] [-f fic.xml]\n"
 	usage += "\n"
 	usage += "If the -f parameter is not utilized, the script will read and\n"
 	usage += "write to stdin and stdout respectively.  The use of quotes on\n"
@@ -89,14 +89,52 @@ if __name__ == '__main__':
 		print "ERROR: " + message
 		sys.exit(1)
 
-	options_list = [
+	def run():
+		if options.files:
+			import os
+			for file in options.files:
+				# First parse the file into memory
+				# Tricks with cwd are needed for relative includes of other xml files to build.xml files
+				cwd = os.getcwd()
+				dirname = os.path.dirname(file)
+				if dirname != '': # for file  comes out as ''
+					os.chdir(os.path.dirname(file))
+
+				f = open(os.path.basename(file),"r")
+				# parse file
+				pom = MavenPom()
+				pom.parse(f)
+				os.chdir(cwd)
+				f.close()
+		else:
+			# process stdin
+			pom = MavenPom()
+			pom.parse(sys.stdin)
+
+		if options.p_group:
+			print "pom group:%s" % pom.group
+
+		if options.p_artifact:
+			print "pom artifact:%s" % pom.artifact
+
+		if options.p_version:
+			print "pom version:%s" % pom.version
+
+		if options.p_dep:
+			i=0
+			for dependency in pom.dependencies:
+				i=i+1
+				print "%d:dep_group:%s" % (i,dependency.group)
+				print "%d:dep_artifact:%s" % (i,dependency.artifact)
+				print "%d:dep_version:%s" % (i,dependency.version)
+
+ 	options_list = [
 		make_option ("-f", "--file",     action="append",     dest="files",      help="Transform files instead of operating on stdout and stdin"),
 		make_option ("-v", "--version" , action="store_true", dest="p_version",  help="get artifact version."),
- 		make_option ("-d", "--depependencies" , action="store_true", dest="p_dep",  help="get dependencies infos"), 
+ 		make_option ("-d", "--depependencies" , action="store_true", dest="p_dep",  help="get dependencies infos"),
 		make_option ("-g", "--group"   , action="store_true", dest="p_group",    help="get artifact group."),
 		make_option ("-a", "--artifact", action="store_true", dest="p_artifact", help="get artifact name."),
 	]
-
 
 	parser = OptionParser(usage, options_list)
 	(options, args) = parser.parse_args()
@@ -112,42 +150,6 @@ if __name__ == '__main__':
 				error("Please specify only one pom at a time.")
 	# End Invalid Arguments Check
 
-	if options.files:
-		import os
-		for file in options.files:
-			# First parse the file into memory
-			# Tricks with cwd are needed for relative includes of other xml files to build.xml files
-			cwd = os.getcwd()
-			dirname = os.path.dirname(file)
-			if dirname != '': # for file  comes out as ''
-				os.chdir(os.path.dirname(file))
-
-			f = open(os.path.basename(file),"r")
-			# parse file
-			pom = MavenPom()
-			pom.parse(f)
-			os.chdir(cwd)
-			f.close()
-	else:
-		# process stdin
-		pom = MavenPom()
-		pom.parse(sys.stdin)
-
-	if options.p_group:
-		print "pom group:%s" % pom.group
-
-	if options.p_artifact:
-		print "pom artifact:%s" % pom.artifact
-
- 	if options.p_version:
-		print "pom version:%s" % pom.version
-
-
-  	if options.p_dep:
-		i=0
-		for dependency in pom.dependencies:
-			i=i+1
-			print "%d:dep_group:%s" % (i,dependency.group)
- 			print "%d:dep_artifact:%s" % (i,dependency.artifact)
- 			print "%d:dep_version:%s" % (i,dependency.version)
+	# main loop
+	run()
 
