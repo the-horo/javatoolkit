@@ -7,10 +7,10 @@
 include ../../makedefs.mak
 
 all:
-	
+
 dist:
 	mkdir -p ../../$(distdir)/src/bsfix
-	cp Makefile bsfix build-xml-source-target.xslt xml-rewrite.py xml-rewrite-2.py class-version-verify.py ../../$(distdir)/src/bsfix
+	cp Makefile bsfix build-xml-source-target.xslt xml-rewrite.py xml-rewrite-2.py xml-rewrite-3.py class-version-verify.py ../../$(distdir)/src/bsfix
 
 install: all
 	install -m 0755 bsfix $(bindir)/
@@ -18,6 +18,7 @@ install: all
 	install build-xml-source-target.xslt ${DESTDIR}/usr/share/javatoolkit/
 	install -m 0755 xml-rewrite.py ${bindir}/
 	install -m 0755 xml-rewrite-2.py ${bindir}/
+	install -m 0755 xml-rewrite-3.py ${xmlrewritedir}/
 	install -m 0755 class-version-verify.py ${bindir}/
 
 testdir:=tests
