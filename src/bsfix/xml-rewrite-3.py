@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
-# vim: set ai ts=8 sts=0 sw=8 tw=0 noexpandtab:
+
 
 # Copyright 2004-2006 Gentoo Foundation
 # Distributed under the terms of the GNU General Public Licence v2
@@ -41,7 +41,7 @@ class DomRewriter:
 	be in StreamRewriterBase subclasses as they are much faster.
 	"""
 	from xml.dom import NotFoundErr
-	def __init__(self, modifyElems, attributes, values=None, index=None):
+	def __init__(self, modifyElems = None, attributes = None , values=None, index=None):
 		self.modifyElems = modifyElems
 		self.attributes = attributes
 		self.values = values
@@ -74,23 +74,59 @@ class DomRewriter:
 
 
 	def add_gentoo_classpath(self,document,**kwargs):
-		matches = document.getElementsByTagName("classpath")
-		gcp = document.createElement("location")
-		gcp.setAttribute("path","${gentoo.classpath}")
+ 		newcp = kwargs.has_key('classpath') and kwargs['classpath'] or "void"
+		newcp = newcp.split(":")
+		gcp = document.createElement("path")
+		for cp in newcp:
+			pe = document.createElement("pathelement")
+			pe.setAttribute("path",cp)
+			gcp.appendChild(pe)
 
+
+		# classpath nodes:
+		# if no refud:
+		#  remove inner elems
+		#  add our gentoo classpath node
+		# else
+		#  rename refid references
+		matches = document.getElementsByTagName("classpath")
 		handled_refs = set()
 		for match in matches:
-			if match.hasAttribute("refid"):
+			if not match.hasAttribute("refid"):
+				for node in match.childNodes[:]:
+					match.removeChild(node)
+					node.unlink()
+
+			        match.appendChild(gcp.cloneNode(True))
+			else:
 				refid = match.getAttribute("refid")
 				for ref in document.getElementsByTagName("path"):
 					id = ref.getAttribute("id")
 					if id not in handled_refs and id == refid:
-						gcp = document.createElement("pathelement")
-						gcp.setAttribute("path","${gentoo.classpath}")
-						ref.appendChild(gcp)
+						for node in ref.childNodes[:]:
+							ref.removeChild(node)
+							node.unlink()
+
+						for pathnode in (gcp.cloneNode(deep=True)).childNodes:
+							ref.appendChild(pathnode.cloneNode(deep=True))
+
 						handled_refs.add(id)
-					else:
-						match.appendChild(gcp)
+
+		# rewrite javac elements
+		matches = document.getElementsByTagName("javac")
+		for match in matches:
+			classpath = match.getAttribute("classpath")
+			if classpath:
+				match.removeAttribute("classpath")
+
+			for node in match.childNodes[:]:
+				if node.nodeName == "classpath":
+					match.removeChild(node)
+					node.unlink()
+
+			classpath = document.createElement("classpath")
+			classpath.appendChild(gcp.cloneNode(True))
+			match.appendChild(classpath)
 
 
 	def process(self,in_stream,callback=None,*args,**kwargs):
@@ -102,7 +138,8 @@ class DomRewriter:
 
 
 	def write(self,stream):
-		stream.write(self.document.toxml())
+  		from xml.dom.ext import PrettyPrint
+		PrettyPrint(self.document,stream)
 
 
 
@@ -131,6 +168,7 @@ class DomRewriter:
 
 
 
+
 from xml.sax.saxutils import XMLGenerator
 class SaxRewriter(XMLGenerator):
 	"""
@@ -148,10 +186,10 @@ class SaxRewriter(XMLGenerator):
 		self.targetAttributes = kwds.has_key('targetAttributes') and kwds['targetAttributes'] or []
 		self.targetValues = kwds.has_key('targetValues') and kwds['targetValues'] or []
 
-		self.deleteElems = kwds.has_key('deleteElems') and kwds['deleteElems'] or [] 
- 		self.deleteAttributes = kwds.has_key('deleteAttributes') and kwds['deleteAttributes'] or []
+		self.deleteElems = kwds.has_key('deleteElems') and kwds['deleteElems'] or []
+		self.deleteAttributes = kwds.has_key('deleteAttributes') and kwds['deleteAttributes'] or []
 
- 		self.src_dirs = kwds.has_key('src_dirs') and kwds['src_dirs'] or []
+		self.src_dirs = kwds.has_key('src_dirs') and kwds['src_dirs'] or []
 		self.output_dir = kwds.has_key('output_dir') and kwds['output_dir'] or None
 
 		self.buffer = StringIO.StringIO()
@@ -195,7 +233,7 @@ class SaxRewriter(XMLGenerator):
 
 	# write as they are or delete if wanted attributes first
 	# next, add / update
- 	def modify_elements(self, name, attrs):
+	def modify_elements(self, name, attrs):
 		self.p(u'<%s ' % name)
 
 		match = ( name in self.elems )
@@ -231,7 +269,7 @@ class SaxRewriter(XMLGenerator):
 		self.p(escape(data))
 
 
- 	def write(self, out_stream):
+	def write(self, out_stream):
 		value = self.buffer.getvalue()
 		out_stream.write(value)
 		self.buffer.truncate(0)
@@ -241,7 +279,7 @@ class SaxRewriter(XMLGenerator):
 		self.buffer.write(str.encode('utf8'))
 
 
-  	def write_attr(self,a,v):
+	def write_attr(self,a,v):
 		self.p(u'%s=%s ' % (a,quoteattr(v, {u'©':'&#169;'})))
 
 
@@ -250,6 +288,7 @@ class SaxRewriter(XMLGenerator):
 		from xml.sax import parseString
 		parseString(in_stream, self)
 		self.p(u'\n')
+
 
 
 if __name__ == '__main__':
@@ -268,6 +307,12 @@ if __name__ == '__main__':
 	usage += "Or:\n"
 	usage += "	" + sys.argv[0] + " [-f file] -g\n"
 	usage += "\n"
+	usage += "Or:\n"
+	usage += "	" + sys.argv[0] + " [-f file] --maven-cleaning\n"
+	usage += "\n"
+	usage += "Or for more detailed help:\n"
+	usage += "	" + sys.argv[0] + " -h\n"
+	usage += "\n"
 	usage += "Multiple actions can be done simultaneously\n"
 	usage += "\n"
 	usage += "If the -f parameter is not utilized, the script will read and\n"
@@ -275,17 +320,20 @@ if __name__ == '__main__':
 	usage += "parameters will break the script.\n"
 
 
+
+#	from IPython.Debugger import Tracer; debug_here = Tracer(colors="Linux");debug_here()  ### Breakpoint ###
+
 	def error(message):
 		print "ERROR: " + message
 		sys.exit(1)
 
 
 	# instream is a string
-	def doRewrite(rewriter, in_stream, callback=None):
+	def doRewrite(rewriter, in_stream, callback=None, **kwargs):
 		if callback:
-			rewriter.process(in_stream, callback)
+			rewriter.process(in_stream, callback, **kwargs)
 		else:
-			rewriter.process(in_stream)
+			rewriter.process(in_stream, **kwargs)
 
 		out = StringIO.StringIO()
 		rewriter.write(out)
@@ -294,35 +342,51 @@ if __name__ == '__main__':
 
 	def processActions(options, f):
 		out_stream = f.read()
+		newcp="${gentoo.classpath}"
 		if options.gentoo_classpath:
 			rewriter = DomRewriter(options.elements, options.attributes, options.values, options.index)
-			out_stream = doRewrite(rewriter, out_stream, rewriter.add_gentoo_classpath)
+			out_stream = doRewrite(rewriter, out_stream, rewriter.add_gentoo_classpath,classpath = newcp)
 
 		if options.doJavadoc:
 			rewriter = SaxRewriter(src_dirs = options.src_dirs, output_dir = options.javadoc_dir[0])
 			out_stream = doRewrite(rewriter, out_stream, rewriter.add_gentoo_javadoc)
 
-
 		if options.doAdd or options.doDelete:
-        		# java-ant-2.eclass does not use these options so we can optimize the ExpatWriter
-			# and let the DomRewriter do these. Also keeps the index option compatible for sure. 
- 			if options.index:
+			# java-ant-2.eclass does not use these options so we can optimize the ExpatWriter
+			# and let the DomRewriter do these. Also keeps the index option compatible for sure.
+			if options.index:
 				rewriter = DomRewriter(options.delete_elements, options.delete_attributes, options.values, options.index)
-	 			out_stream = doRewrite(rewriter, out_stream, rewriter.delete_elements) 
+				out_stream = doRewrite(rewriter, out_stream, rewriter.delete_elements)
 			else:
-				rewriter = SaxRewriter( elems = options.elements,
-						attributes = options.attributes,
-						values = options.values,
-						sourceElems = options.source_elements,
-						sourceAttributes = options.source_attributes,
-						sourceValues = options.source_values,
-						targetElems = options.target_elements,
-						targetAttributes = options.target_attributes,
-						targetValues = options.target_values,
- 						deleteElems = options.delete_elements,
-						deleteAttributes = options.delete_attributes 
-						)
- 				out_stream = doRewrite(rewriter, out_stream, rewriter.modify_elements) 
+				rewriter = SaxRewriter(
+					elems = options.elements,
+					attributes = options.attributes,
+					values = options.values,
+					sourceElems = options.source_elements,
+					sourceAttributes = options.source_attributes,
+					sourceValues = options.source_values,
+					targetElems = options.target_elements,
+					targetAttributes = options.target_attributes,
+					targetValues = options.target_values,
+					deleteElems = options.delete_elements,
+					deleteAttributes = options.delete_attributes
+				)
+				out_stream = doRewrite(rewriter, out_stream, rewriter.modify_elements)
+
+		if options.doMaven:
+			if options.mavenMultiProjectsDirs:
+				for elem in options.mavenMultiProjectsDirs:
+					newcp+=":"+elem
+
+ 			rewriter = DomRewriter()
+			out_stream = doRewrite(rewriter, out_stream, rewriter.add_gentoo_classpath, classpath = newcp)
+
+			deleteElems = []
+			deleteAttributes = []
+			deleteElems.append("target")
+			deleteAttributes.append("depends")
+			rewriter = SaxRewriter( deleteElems = deleteElems, deleteAttributes = deleteAttributes)
+			out_stream = doRewrite(rewriter, out_stream, rewriter.modify_elements)
 
 		return out_stream
 
@@ -343,7 +407,10 @@ if __name__ == '__main__':
 		make_option ("-n", "--delete-element", action="append", dest="delete_elements", help="Tag of the element of which the attributes to be deleted.  These can be chained for multiple elements."),
 		make_option ("-o", "--output-directory", action="append", dest="javadoc_dir", help="javadoc output directory. Must be an existing directory"),
 		make_option ("-p", "--source-directory", action="append", dest="src_dirs", help="source directory for javadoc generation. Must be an existing directory"),
+		make_option ("-q", "--maven-cleaning", action="store_true", dest="doMaven", default=False, help="Turns on maven generated build.xml cleanup rewriting."),
 		make_option ("-r", "--source-element", action="append", dest="source_elements", help="Tag of the element of which the attributes to be changed just in source scope.  These can be chained for multiple elements."),
+		make_option ("-s", "--multi-project-dirs", action="append", dest="mavenMultiProjectsDirs", help="Dirs in classpath notation"),
+
 		make_option ("-t", "--source-attribute", action="append", dest="source_attributes", help="Attribute of the matching elements to change. These can be chained for multiple value-attribute pairs (for source only)"),
 		make_option ("-v", "--value", action="append", dest="values", help="Value to set the attribute to."),
 		make_option ("-y", "--source-value", action="append", dest="source_values", help="Value to set the attribute to. (sourceonly)")
@@ -352,7 +419,7 @@ if __name__ == '__main__':
 	(options, args) = parser.parse_args()
 
 	# Invalid Arguments Must be smited!
-	if not options.doAdd and not options.doDelete and not options.gentoo_classpath and not options.doJavadoc:
+	if not options.doAdd and not options.doDelete and not options.gentoo_classpath and not options.doJavadoc and not options.doMaven:
 		print usage
 		print
 		error("No action was specified.")
@@ -420,3 +487,4 @@ if __name__ == '__main__':
 	else:
 		outxml = processActions(options, sys.stdin)
 		sys.stdout.write(outxml)
+		# vim: set ai ts=8 sts=0 sw=8 tw=0 noexpandtab:

@@ -12,7 +12,7 @@ dist:
 	cp Makefile maven-helper.py ../../$(distdir)/src/maven
 
 install: all
-	install -m 0755 maven-helper.py $(bindir)/
+	install -m 0755 maven-helper.py $(mavenhelperdir)/
 
 testdir:=tests
 

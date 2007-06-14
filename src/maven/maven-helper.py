@@ -47,18 +47,19 @@ class MavenPom:
 	def getInfos(self,node):
 		for child_node in node.childNodes:
 			if child_node.nodeType == child_node.ELEMENT_NODE:
-				if child_node.childNodes[0].nodeValue != "":
-					if child_node.nodeName == "version":
-						self.version = child_node.childNodes[0].nodeValue
+				if child_node.childNodes:
+					if child_node.childNodes[0].nodeValue != "":
+						if child_node.nodeName == "version":
+							self.version = child_node.childNodes[0].nodeValue
 
-					if child_node.nodeName == "artifactId":
-						self.artifact = child_node.childNodes[0].nodeValue
+						if child_node.nodeName == "artifactId":
+							self.artifact = child_node.childNodes[0].nodeValue
 
-					if child_node.nodeName == "groupId":
-						self.group = child_node.childNodes[0].nodeValue
+						if child_node.nodeName == "groupId":
+							self.group = child_node.childNodes[0].nodeValue
 
-					if child_node.nodeName == "name":
-						self.name = child_node.childNodes[0].nodeValue
+						if child_node.nodeName == "name":
+							self.name = child_node.childNodes[0].nodeValue
 
 
 	def getDescription(self,mydoc,**kwargs):
@@ -126,14 +127,15 @@ class MavenPom:
 			if dependencies_root:
 				for node in dependencies_root:
 					for classpath_element in self.cli_options.classpath[0].split(':'):
-						dependency_elem = xmldoc.createElement("dependency")
-						dependency_elem.appendChild( self.create_element(xmldoc, "groupId", "sexy"))
-						dependency_elem.appendChild( self.create_element(xmldoc, "artifactId", "gentoo%d" % (i)))
-						dependency_elem.appendChild( self.create_element(xmldoc, "version", "666"))
-						dependency_elem.appendChild( self.create_element(xmldoc, "scope", "system"))
-						dependency_elem.appendChild( self.create_element(xmldoc, "systemPath", classpath_element))
-						node.appendChild(dependency_elem)
-						i += 1
+						if classpath_element:
+							dependency_elem = xmldoc.createElement("dependency")
+							dependency_elem.appendChild( self.create_element(xmldoc, "groupId", "sexy"))
+							dependency_elem.appendChild( self.create_element(xmldoc, "artifactId", "gentoo%d" % (i)))
+							dependency_elem.appendChild( self.create_element(xmldoc, "version", "666"))
+							dependency_elem.appendChild( self.create_element(xmldoc, "scope", "system"))
+							dependency_elem.appendChild( self.create_element(xmldoc, "systemPath", classpath_element))
+							node.appendChild(dependency_elem)
+							i += 1
 
 		# overwrite source/target options if any
 		# remove version node for all plugins
@@ -168,9 +170,29 @@ class MavenPom:
 				source_node = self.create_element(xmldoc,"source",self.cli_options.p_source[0])
 				configuration_node.appendChild(source_node)
 
- 			dependencies_root = ( xmldoc.getElementsByTagName("plugins") or [] )
-			for node in dependencies_root:
-				node.appendChild(plugin_node)
+ 			plugins_nodes = ( xmldoc.getElementsByTagName("plugins") or [] )
+			# no plugins node
+			if len(plugins_nodes) < 1  :
+				plugins_node = self.create_element(xmldoc,"plugins") 
+				plugins_nodes.append(plugins_node)
+				
+				for plugins_node in plugins_nodes:
+					# add our generated plugin node
+					plugins_node.appendChild(plugin_node)
+
+					# no build node
+					build_nodes = ( xmldoc.getElementsByTagName("build") or [] )
+					if len(build_nodes) < 1 : 
+						build_node = self.create_element(xmldoc,"build")  
+						build_nodes.append(build_node)
+						# add build node to project_node
+						project_nodes = ( xmldoc.getElementsByTagName("project") or [] ) 
+						for project_node in project_nodes:
+							project_node.appendChild(build_node)
+
+					# add plugins structure to the build node
+					for build_node in build_nodes:
+						build_node.appendChild(plugins_node.cloneNode(deep=True))
 
 		from xml.dom.ext import PrettyPrint
 		self.write = self.__write
