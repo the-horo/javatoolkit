@@ -6,7 +6,7 @@
 
 # Override this on command line when making a release, ie 'dist'
 
-VERSION=0.2.0-r3
+VERSION=0.2.0-r5
 RELEASE_TAG=
 PYVERSION="`python-config | sed 's/-l//' | sed 's/ -lm.*//'`"
 DESTDIR=
@@ -17,4 +17,5 @@ bindir=$(DESTDIR)/usr/bin
 sbindir=$(DESTDIR)/usr/sbin
 mandir=$(DESTDIR)/usr/share/man/man1
 xmlrewritedir=$(DESTDIR)/usr/share/javatoolkit
+mavenhelperdir=$(DESTDIR)/usr/share/javatoolkit
 
