@@ -20,7 +20,8 @@ setup (
         "src/py/xml-rewrite-3.py",
         "src/py/findclass",
         "src/py/xml-rewrite.py",
-        "src/py/buildparser"
+        "src/py/buildparser",
+	"src/py/class-version-verify.py"
     ]
 )
 

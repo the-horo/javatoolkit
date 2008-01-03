@@ -3,10 +3,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-#import os,sys
-#from os.path import join, getsize
-#from struct import unpack
-#from optparse import OptionParser, make_option
+import os,sys
+from struct import unpack
 from zipfile import ZipFile
 
 class cvv:
