@@ -208,3 +208,5 @@ class MavenPom:
 
         if callback:
             callback(self.mydoc,**kwargs)
+
+# vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap:

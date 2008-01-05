@@ -129,4 +129,4 @@ class SaxRewriter(XMLGenerator):
         parseString(in_stream, self)
         self.p(u'\n')
 
-#set expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap 
+# vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap:

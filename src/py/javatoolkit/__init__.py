@@ -1,4 +1,4 @@
-#! /usr/bin/python2
+#!/usr/bin/env python
 #
 # Copyright(c) 2004, Karl Trygve Kalleberg <karltk@gentoo.org>
 # Copyright(c) 2004, Gentoo Foundation

@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/env python
 #
 # Copyright(c) 2006, James Le Cuirot <chewi@aura-online.co.uk>
 # Copyright(c) 2005, Karl Trygve Kalleberg <karltk@gentoo.org>

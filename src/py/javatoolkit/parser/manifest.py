@@ -1,5 +1,3 @@
-#! /usr/bin/python
-#
 # Copyright(c) 2006, James Le Cuirot <chewi@aura-online.co.uk>
 #
 # Licensed under the GNU General Public License, v2
@@ -11,51 +9,50 @@ import parser
 
 class ManifestParser(parser.Parser):
 
-	def parse(self, ins):
-		""" Parse an input stream containing a MANIFEST.MF file. Return a 
-		structured document represented by tree.Node
+    def parse(self, ins):
+        """ Parse an input stream containing a MANIFEST.MF file. Return a 
+        structured document represented by tree.Node
 
-		@param ins - input stream
-		@return tree.Node containing the structured representation
-		"""
+        @param ins - input stream
+        @return tree.Node containing the structured representation
+        """
 
-		lineno = 0
-		attrib = ""
-		value = ""
-		root = Node()
+        lineno = 0
+        attrib = ""
+        value = ""
+        root = Node()
 
-		for x in ins.readlines():
-			lineno += 1
+        for x in ins.readlines():
+            lineno += 1
 
-			if len(x.strip()) == 0:
-				continue
+            if len(x.strip()) == 0:
+                continue
 
-			if x[:1] == " ":
-				if attrib == "":
-					raise ParseError("Malformed line " + str(lineno))
+            if x[:1] == " ":
+                if attrib == "":
+                    raise ParseError("Malformed line " + str(lineno))
 
-				value += x.strip()
-				continue
+                value += x.strip()
+                continue
 
-			xs = x.split(": ", 2)
+            xs = x.split(": ", 2)
 
-			if len(xs) > 1:
-				if attrib != "":
-					root.add_kid(Node(attrib,value))
+            if len(xs) > 1:
+                if attrib != "":
+                    root.add_kid(Node(attrib,value))
 
-				attrib = xs[0]
-				value = xs[1].strip()
+                attrib = xs[0]
+                value = xs[1].strip()
 
-			else:
-				raise ParseError("Malformed line " + str(lineno))
+            else:
+                raise ParseError("Malformed line " + str(lineno))
 
-		if attrib != "":
-			root.add_kid(Node(attrib,value))
+        if attrib != "":
+            root.add_kid(Node(attrib,value))
 
-		return root
+        return root
 
-	def output(self, tree):
-		tree.output("", ": ", "", ",", " ");
+    def output(self, tree):
+        tree.output("", ": ", "", ",", " ");
 
-if __name__ == "__main__":
-	print "This is not an executable module"	
+# vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap:

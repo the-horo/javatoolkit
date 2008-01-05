@@ -49,4 +49,4 @@ class cvv:
             if filename.endswith(".jar"):
                 self.do_jar(filename)
 
-#set expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap 
+# vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap:

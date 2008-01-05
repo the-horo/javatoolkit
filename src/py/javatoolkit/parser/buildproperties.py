@@ -1,5 +1,3 @@
-#! /usr/bin/python
-#
 # Copyright(c) 2006, James Le Cuirot <chewi@aura-online.co.uk>
 # Copyright(c) 2004, Karl Trygve Kalleberg <karltk@gentoo.org>
 # Copyright(c) 2004, Gentoo Foundation
@@ -13,71 +11,70 @@ import parser
 
 class BuildPropertiesParser(parser.Parser):
 
-	def parse(self, ins):
-		""" Parse an input stream containing an ant build.properties file. Return a 
-		structured document represented by tree.Node
+    def parse(self, ins):
+        """ Parse an input stream containing an ant build.properties file. Return a 
+        structured document represented by tree.Node
 
-		@param ins - input stream
-		@return tree.Node containing the structured representation
-		"""
+        @param ins - input stream
+        @return tree.Node containing the structured representation
+        """
 
-		lineno = 0
-		continued_line = False
-		inside_html_comment = False
-		attrib = ""
-		value = ""
-		root = Node()
+        lineno = 0
+        continued_line = False
+        inside_html_comment = False
+        attrib = ""
+        value = ""
+        root = Node()
 
-		for x in ins.readlines():
-			lineno += 1
-			x = x.strip()
+        for x in ins.readlines():
+            lineno += 1
+            x = x.strip()
 
-			if inside_html_comment and x.find("-->") != -1:
-				inside_html_comment = False
-				x = x.split("-->", 1)[0]
+            if inside_html_comment and x.find("-->") != -1:
+                inside_html_comment = False
+                x = x.split("-->", 1)[0]
 
-			if x.find("<!--") != -1:
-				inside_html_comment = True
+            if x.find("<!--") != -1:
+                inside_html_comment = True
 
-			if inside_html_comment:
-				continue
+            if inside_html_comment:
+                continue
 
-			if continued_line:
-				continued_line = False
-				value += x.strip("\"")
+            if continued_line:
+                continued_line = False
+                value += x.strip("\"")
 
-				if len(value) and value[-1] == "\\":
-					value = value[:-1]
-					continued_line = True
-					continue
+                if len(value) and value[-1] == "\\":
+                    value = value[:-1]
+                    continued_line = True
+                    continue
 
-				root.add_kid(Node(attrib,value))
-				continue
+                root.add_kid(Node(attrib,value))
+                continue
 
-			if len(x) == 0 or x[:1] == "#":
-				continue
+            if len(x) == 0 or x[:1] == "#":
+                continue
 
-			x = x.split("#", 1)[0]
-			xs = x.split("=", 2)
+            x = x.split("#", 1)[0]
+            xs = x.split("=", 2)
 
-			if len(xs) > 1:
-				attrib = xs[0].strip()
-				value = xs[1].strip().strip("\"")
+            if len(xs) > 1:
+                attrib = xs[0].strip()
+                value = xs[1].strip().strip("\"")
 
-				if value != "" and value[-1] == "\\":
-					value = value[:-1]
-					continued_line = True
-					continue
+                if value != "" and value[-1] == "\\":
+                    value = value[:-1]
+                    continued_line = True
+                    continue
 
-				root.add_kid(Node(attrib,value))
+                root.add_kid(Node(attrib,value))
 
-			else:
-				raise ParseError("Malformed line " + str(lineno))
+            else:
+                raise ParseError("Malformed line " + str(lineno))
 
-		return root
-		
-	def output(self, tree):
-		tree.output("", " = ", "")
+        return root
+        
+    def output(self, tree):
+        tree.output("", " = ", "")
 
-if __name__ == "__main__":
-	print "This is not an executable module"	
+# vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap:

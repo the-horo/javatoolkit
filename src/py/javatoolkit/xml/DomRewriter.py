@@ -117,5 +117,4 @@ class DomRewriter:
         from xml.dom.ext import PrettyPrint
         PrettyPrint(self.document,stream)
 
-
-#set expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap 
+# vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap:
