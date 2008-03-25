@@ -1,0 +1,41 @@
+#!/usr/bin/python
+
+import sys
+import xml.etree.cElementTree as et
+from optparse import OptionParser
+
+parser = OptionParser()
+parser.add_option('-c', '--changeattributes', dest='change', action="append", nargs=3)
+parser.add_option('-g', '--gentooclasspath', dest="gcp", action="store_true", default=False)
+parser.add_option('-e', '--encoding', dest="encoding")
+(options, args) = parser.parse_args()
+
+changes = []
+if options.change:
+	for c in options.change:
+		changes.append((c[0].split(),c[1], c[2]))
+
+gcp = options.gcp
+gcp_str = '${gentoo.classpath}'
+gcp_sub = et.Element('classpath', path=gcp_str)
+
+for file in args:
+	tree = et.ElementTree(file=file)
+	for elem in tree.getiterator():
+		for c in changes:
+			elems, attr, value = c
+			if elem.tag in elems:
+				elem.attrib[attr] = value
+		if elem.tag == 'javac':
+			if gcp:
+				elem.attrib['classpath'] = gcp_str
+			if options.encoding:
+				elem.attrib['encoding'] = options.encoding
+		if elem.tag == 'junit':
+			if gcp:
+				elem.append(gcp_sub)
+			elem.attrib['haltonfailure'] = 'true'
+
+	f = open(file, 'w')
+	tree.write(f)
+	f.close()
