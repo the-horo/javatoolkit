@@ -21,20 +21,26 @@ gcp_sub = et.Element('classpath', path=gcp_str)
 
 for file in args:
 	tree = et.ElementTree(file=file)
-	for elem in tree.getiterator():
-		for c in changes:
-			elems, attr, value = c
-			if elem.tag in elems:
-				elem.attrib[attr] = value
-		if elem.tag == 'javac':
+	if gcp or options.encoding:
+		for javac in tree.getiterator('javac'):
 			if gcp:
-				elem.attrib['classpath'] = gcp_str
+				javac.attrib['classpath'] = gcp_str
 			if options.encoding:
-				elem.attrib['encoding'] = options.encoding
-		if elem.tag == 'junit':
+				javac.attrib['encoding'] = options.encoding
+		for javadoc in tree.getiterator('javadoc'):
 			if gcp:
-				elem.append(gcp_sub)
-			elem.attrib['haltonfailure'] = 'true'
+				javadoc.attrib['classpath'] = gcp_str
+			if options.encoding:
+				javadoc.attrib['encoding'] = options.encoding
+	for c in changes:
+		elems, attr, value = c
+		for elem in elems:
+			for e in tree.getiterator(elem):
+				e.attrib[attr] = value
+	for junit in tree.getiterator('junit'):
+		if gcp:
+			junit.append(gcp_sub)
+		junit.attrib['haltonfailure'] = 'true'
 
 	f = open(file, 'w')
 	tree.write(f)
