@@ -76,8 +76,8 @@ class BuildPropertiesParser(parser.Parser):
 
 		return root
 		
-	def output(self, tree):
-		tree.output("", " = ", "")
+	def output(self, ous, tree):
+		tree.output(ous, "", " = ", "")
 
 if __name__ == "__main__":
 	print "This is not an executable module"	

@@ -1,6 +1,6 @@
 #! /usr/bin/python
 #
-# Copyright(c) 2006, James Le Cuirot <chewi@aura-online.co.uk>
+# Copyright(c) 2006, 2008 James Le Cuirot <chewi@aura-online.co.uk>
 # Copyright(c) 2005, Karl Trygve Kalleberg <karltk@gentoo.org>
 #
 # Licensed under the GNU General Public License, v2
@@ -38,6 +38,9 @@ def parse_args():
 	parser.add_option('-t', '--type', action='store', type='choice',
 					dest='type', choices=['manifest', 'buildprops'],
 					help='Type of file to parse: manifest or buildprops')
+ 	
+	parser.add_option('-i', '--in-place', action='store_true', dest='in_place',
+					help='Edit file in place when replacing')
 	
 	opt, args = parser.parse_args()
 
@@ -78,6 +81,7 @@ def main():
 			sys.exit(__productname__ + ": error: Unknown file type. Specify using the -t option.")
 		
 		t = p.parse(f)
+		f.close()
 
 	except ParseError:
 		sys.exit(__productname__ + ": error: Unable to parse file.")
@@ -87,8 +91,14 @@ def main():
 		
 		if n != None:
 			n.value = args[1]
+
+		if n != None and opt.in_place:
+			f = open(args[-1], "w+")
+			p.output(f, t)
+			f.close()
 		
-		p.output(t)
+		else:
+			p.output(sys.stdout, t)
 
 	elif len(args) > 1:
 		n = t.find_node(args[0])

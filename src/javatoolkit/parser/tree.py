@@ -40,23 +40,23 @@ class Node:
 			
 		self._kids.append(kid)
 	
-	def _dump_kids(self, indent, ous):
+	def _dump_kids(self, ous, indent):
 		for x in self._kids:
-			x.dump(indent + 1)
+			x.dump(ous, indent + 1)
 	
 	"""
 	Dump self as text to stream.
 	"""
-	def dump(self, indent = 0, ous = sys.stdout):
+	def dump(self, ous, indent = 0):
 		if self.name:
 			ous.write((" " * indent) + self.name + " = " + self.value + "\n")
 		
-		self._dump_kids(indent, ous)
+		self._dump_kids(ous, indent)
 	
 	"""
 	Output self as text to stream using the given format.
 	"""
-	def output(self, before, between, after, wrap = None, indent = "", ous = sys.stdout):		
+	def output(self, ous, before, between, after, wrap = None, indent = ""):		
 		if self.name:
 			outval = self.value
 		
@@ -66,7 +66,7 @@ class Node:
 			ous.write(before + self.name + between + outval + after + "\n")
 		
 		for x in self._kids:
-			x.output(before, between, after, wrap, indent, ous)
+			x.output(ous, before, between, after, wrap, indent)
 
 	"""
 	Returns a lists of all the node names.

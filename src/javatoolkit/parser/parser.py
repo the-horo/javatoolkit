@@ -9,7 +9,7 @@
 class Parser:
 	def parse(self, ins):
 		raise NotImplementedError
-	def output(self, tree):
+	def output(self, ous, tree):
 		raise NotImplementedError		
 
 if __name__ == "__main__":
