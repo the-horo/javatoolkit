@@ -91,8 +91,10 @@ def main():
 		
 		if n != None:
 			n.value = args[1]
+		else:
+			t.add_kid(Node(args[0], args[1]))
 
-		if n != None and opt.in_place:
+		if opt.in_place:
 			f = open(args[-1], "w+")
 			p.output(f, t)
 			f.close()
