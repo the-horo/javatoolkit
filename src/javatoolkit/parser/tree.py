@@ -1,6 +1,6 @@
 #! /usr/bin/python
 #
-# Copyright(c) 2006, James Le Cuirot <chewi@aura-online.co.uk>
+# Copyright(c) 2008, 2006, James Le Cuirot <chewi@aura-online.co.uk>
 # Copyright(c) 2004, Karl Trygve Kalleberg <karltk@gentoo.org>
 # Copyright(c) 2004, Gentoo Foundation
 #
@@ -61,7 +61,7 @@ class Node:
 			outval = self.value
 		
 			if wrap != None:
-				outval = outval.replace(wrap, wrap + "\n" + indent)
+				outval = self.__wrap_outside_quotes(outval, wrap, indent)
 			
 			ous.write(before + self.name + between + outval + after + "\n")
 		
@@ -102,6 +102,33 @@ class Node:
 					return y
 		
 		return None
+
+	"""
+	Wrap using the given character and indent string, without wrapping
+	inside quotes. Python's regexp engine cannot handle this.
+	
+	@param text - text to wrap
+	@param wrap - character to wrap at
+	@param indent - indent string to use, can be empty
+	@param pos - recursive parameter only, don't use
+	
+	@return wrapped text
+	"""
+	def __wrap_outside_quotes(self, text, wrap, indent, pos = None):
+		if pos == None:
+			pos = len(text)
 		
+		next_wrap = text.rfind(wrap, 0, pos)
+		
+		if next_wrap <= 0:
+			return text
+		
+		num_quotes = text.count('"', next_wrap, pos)
+		
+		if num_quotes % 2 != 0:
+			return self.__wrap_outside_quotes(text, wrap, indent, text.rfind('"', 0, next_wrap + 1))
+		
+		return self.__wrap_outside_quotes(text[0:next_wrap] + wrap + "\n" + indent + text[next_wrap + 1:], wrap, indent, next_wrap)
+
 if __name__ == "__main__":
 	print "This is not an executable module"		
