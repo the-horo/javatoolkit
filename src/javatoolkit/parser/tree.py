@@ -1,6 +1,6 @@
 #! /usr/bin/python
 #
-# Copyright(c) 2008, 2006, James Le Cuirot <chewi@aura-online.co.uk>
+# Copyright(c) 2006, 2008, James Le Cuirot <chewi@aura-online.co.uk>
 # Copyright(c) 2004, Karl Trygve Kalleberg <karltk@gentoo.org>
 # Copyright(c) 2004, Gentoo Foundation
 #
@@ -57,16 +57,20 @@ class Node:
 	Output self as text to stream using the given format.
 	"""
 	def output(self, ous, before, between, after, wrap = None, indent = ""):		
-		if self.name:
-			outval = self.value
-		
-			if wrap != None:
-				outval = self.__wrap_outside_quotes(outval, wrap, indent)
-			
-			ous.write(before + self.name + between + outval + after + "\n")
+		if self.name:			
+			ous.write(before + self.name + between + self.output_value(wrap, indent) + after + "\n")
 		
 		for x in self._kids:
 			x.output(ous, before, between, after, wrap, indent)
+
+	"""
+	Return node value as string using the given format.
+	"""
+	def output_value(self, wrap = None, indent = ""):
+		if wrap == None:
+			return self.value
+		else:
+			return self.__wrap_outside_quotes(self.value, wrap, indent)
 
 	"""
 	Returns a lists of all the node names.

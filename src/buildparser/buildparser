@@ -35,12 +35,16 @@ def parse_args():
 		about += "\n          " + x
 
 	parser = OptionParser(usage, version=about)
+	
 	parser.add_option('-t', '--type', action='store', type='choice',
 					dest='type', choices=['manifest', 'buildprops'],
 					help='Type of file to parse: manifest or buildprops')
  	
 	parser.add_option('-i', '--in-place', action='store_true', dest='in_place',
 					help='Edit file in place when replacing')
+ 	
+	parser.add_option('-w', '--wrap', action='store_true', dest='wrap',
+					help='Wrap when returning singular values')
 	
 	opt, args = parser.parse_args()
 
@@ -106,7 +110,10 @@ def main():
 		n = t.find_node(args[0])
 		
 		if n != None:
-			print n.value
+			if opt.wrap:
+				print p.wrapped_value(n)
+			else:
+				print n.value
 	
 	else:
 		for x in t.node_names():

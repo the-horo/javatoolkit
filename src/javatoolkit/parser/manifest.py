@@ -1,6 +1,6 @@
 #! /usr/bin/python
 #
-# Copyright(c) 2006, James Le Cuirot <chewi@aura-online.co.uk>
+# Copyright(c) 2006, 2008, James Le Cuirot <chewi@aura-online.co.uk>
 #
 # Licensed under the GNU General Public License, v2
 #
@@ -55,7 +55,10 @@ class ManifestParser(parser.Parser):
 		return root
 
 	def output(self, ous, tree):
-		tree.output(ous, "", ": ", "", ",", " ");
+		tree.output(ous, "", ": ", "", ",", " ")
+	
+	def wrapped_value(self, node):
+		return node.output_value(",")
 
 if __name__ == "__main__":
 	print "This is not an executable module"	
