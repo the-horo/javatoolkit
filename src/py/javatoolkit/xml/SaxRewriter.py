@@ -4,11 +4,12 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-#import os
-#import sys
-#import StringIO
+import os
+import sys
+import StringIO
 
 from xml.sax.saxutils import XMLGenerator
+from xml.sax.saxutils import quoteattr
 
 class SaxRewriter(XMLGenerator):
     """

@@ -25,8 +25,10 @@
 
 import os
 import sys
+import StringIO
 from optparse import OptionParser, make_option
-from javatoolkit.xml import *
+from javatoolkit.xml.DomRewriter import DomRewriter
+from javatoolkit.xml.SaxRewriter import SaxRewriter
 
 __version__ = "$Revision: 1.7 $"[11:-2]
 
