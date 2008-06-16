@@ -1,6 +1,0 @@
-2005-05-11: Karl Trygve Kalleberg <karltk@gentoo.org
-	* Added man page.
-
-2004-08-10: Karl Trygve Kalleberg <karltk@gentoo.org
-	* Added sun-fetch, an easier front-end to sun-fetch.py
-	* Install sun-fetch.py in ${libdir}/bin/
