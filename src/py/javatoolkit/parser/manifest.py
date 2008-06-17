@@ -52,10 +52,10 @@ class ManifestParser(parser.Parser):
 
         return root
 
-	def output(self, ous, tree):
-		tree.output(ous, "", ": ", "", ",", " ")
-	
-	def wrapped_value(self, node):
-		return node.output_value(",")
+    def output(self, ous, tree):
+        tree.output(ous, "", ": ", "", ",", " ")
+    
+    def wrapped_value(self, node):
+        return node.output_value(",")
 
 # vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap:
