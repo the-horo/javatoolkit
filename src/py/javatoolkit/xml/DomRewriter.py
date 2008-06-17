@@ -50,59 +50,23 @@ class DomRewriter:
 
 
     def add_gentoo_classpath(self,document,**kwargs):
-        newcp = kwargs.has_key('classpath') and kwargs['classpath'] or "void"
-        newcp = newcp.split(":")
-        gcp = document.createElement("path")
-        for cp in newcp:
-            pe = document.createElement("pathelement")
-            pe.setAttribute("path",cp)
-            gcp.appendChild(pe)
+        if not kwargs.has_key('classpath') or not kwargs['classpath']:
+            return
 
+        cp = document.createElement("classpath")
+        cp.setAttribute("path", kwargs['classpath'])
+        last_parent = None
 
-        # classpath nodes:
-        # if no refud:
-        #  remove inner elems
-        #  add our gentoo classpath node
-        # else
-        #  rename refid references
-        matches = document.getElementsByTagName("classpath")
-        handled_refs = set()
-        for match in matches:
-            if not match.hasAttribute("refid"):
-                for node in match.childNodes[:]:
-                    match.removeChild(node)
-                    node.unlink()
+        # Add our classpath element to every node already containing a classpath element.
+        for match in document.getElementsByTagName("classpath"):
+            if last_parent != match.parentNode:
+                match.parentNode.appendChild(cp.cloneNode(True))
+                last_parent = match.parentNode
 
-                    match.appendChild(gcp.cloneNode(True))
-            else:
-                refid = match.getAttribute("refid")
-                for ref in document.getElementsByTagName("path"):
-                    id = ref.getAttribute("id")
-                    if id not in handled_refs and id == refid:
-                        for node in ref.childNodes[:]:
-                            ref.removeChild(node)
-                            node.unlink()
-
-                        for pathnode in (gcp.cloneNode(deep=True)).childNodes:
-                            ref.appendChild(pathnode.cloneNode(deep=True))
-
-                        handled_refs.add(id)
-
-        # rewrite javac elements
-        matches = document.getElementsByTagName("javac")
-        for match in matches:
-            classpath = match.getAttribute("classpath")
-            if classpath:
-                match.removeAttribute("classpath")
-
-            for node in match.childNodes[:]:
-                if node.nodeName == "classpath":
-                    match.removeChild(node)
-                    node.unlink()
-
-            classpath = document.createElement("classpath")
-            classpath.appendChild(gcp.cloneNode(True))
-            match.appendChild(classpath)
+        # Add our classpath element to every javac node we missed earlier.
+        for match in document.getElementsByTagName("javac"):
+            if not match.getElementsByTagName("classpath"):
+                match.appendChild(cp.cloneNode(True))
 
 
     def process(self,in_stream,callback=None,*args,**kwargs):
