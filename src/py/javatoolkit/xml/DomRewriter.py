@@ -64,7 +64,7 @@ class DomRewriter:
                 last_parent = match.parentNode
 
         # Add our classpath element to every javac node we missed earlier.
-        for match in document.getElementsByTagName("javac"):
+        for match in document.getElementsByTagName("javac") + document.getElementsByTagName("xjavac"):
             if not match.getElementsByTagName("classpath"):
                 match.appendChild(cp.cloneNode(True))
 
