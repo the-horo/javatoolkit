@@ -1,1 +1,14 @@
-Only old...
+javatoolkit-0.3.0 (19 Jun 2008)
+===============================
+ - Files reorganised into a tidier structure.
+ - Shared code now installed in Python's site-packages.
+ - xml-rewrite-3.py now rewrites the classpath in a simpler but more reliable
+   way by adding new elements instead of replacing existing ones.
+ - buildparser now supports in-place editing, optional wrapping of singular
+   values, addition of new keys and it no longer wraps inside quotes.
+ - New jarjarclean utility for converting jarjar tasks in build.xml files into
+   regular jar tasks.
+
+Some time before that...
+========================
+ - Stuff happened.
