@@ -8,7 +8,7 @@ from distutils.core import setup
 
 setup (
     name = 'javatoolkit',
-    version = '0.2.1',
+    version = '0.3.0',
     description = 'Collection of Gentoo-specific tools for Java.',
     maintainer = 'Gentoo Java Team',
     maintainer_email = 'java@gentoo.org',

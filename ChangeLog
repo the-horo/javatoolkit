@@ -1,0 +1,277 @@
+2008-06-19 09:58  James Le Cuirot <chewi@aura-online.co.uk>
+
+	* NEWS: javatoolkit NEWS.
+
+2008-06-17 10:09  James Le Cuirot <chewi@aura-online.co.uk>
+
+	* src/py/javatoolkit/xml/DomRewriter.py: Forgot about xjavac tags.
+
+2008-06-17 10:02  James Le Cuirot <chewi@aura-online.co.uk>
+
+	* src/py/javatoolkit/xml/DomRewriter.py: New approach to rewriting
+	  the classpath. The previous one didn't work very well.
+
+2008-06-17 00:17  James Le Cuirot <chewi@aura-online.co.uk>
+
+	* src/py/javatoolkit/parser/manifest.py: These tabs got left
+	  behind.
+
+2008-06-16 14:58  James Le Cuirot <chewi@aura-online.co.uk>
+
+	* AUTHORS, Makefile, makedefs.mak, setup.py, src/bsfix,
+	  src/buildparser, src/findclass, src/jarjarclean, src/javatoolkit,
+	  src/man, src/man/findclass.1, src/maven, src/obsolete,
+	  src/obsolete/bsfix, src/obsolete/bsfix/build-xml-rewrite,
+	  src/obsolete/bsfix/class-version-verify.py,
+	  src/obsolete/bsfix/xml-rewrite-2.py,
+	  src/obsolete/bsfix/xml-rewrite-3.py,
+	  src/obsolete/bsfix/xml-rewrite.py, src/py,
+	  src/py/build-xml-rewrite, src/py/buildparser,
+	  src/py/class-version-verify.py, src/py/findclass,
+	  src/py/jarjarclean, src/py/javatoolkit,
+	  src/py/javatoolkit/.cvsignore, src/py/javatoolkit/Makefile,
+	  src/py/javatoolkit/__init__.py, src/py/javatoolkit/classpath.py,
+	  src/py/javatoolkit/cvv.py, src/py/javatoolkit/maven,
+	  src/py/javatoolkit/output.py,
+	  src/py/javatoolkit/parser/.cvsignore,
+	  src/py/javatoolkit/parser/__init__.py,
+	  src/py/javatoolkit/parser/buildproperties.py,
+	  src/py/javatoolkit/parser/helpers.py,
+	  src/py/javatoolkit/parser/manifest.py,
+	  src/py/javatoolkit/parser/parser.py,
+	  src/py/javatoolkit/parser/tree.py, src/py/javatoolkit/xml,
+	  src/py/javatoolkit/xml/__init__.py, src/py/maven-helper.py,
+	  src/py/xml-rewrite-2.py, src/py/xml-rewrite-3.py,
+	  src/py/xml-rewrite.py, src/sun-fetch: Merge ali_bush's
+	  layout_refactor_branch back to trunk with some changes.
+
+2008-06-15 20:23  James Le Cuirot <chewi@aura-online.co.uk>
+
+	* Makefile, src/jarjarclean, src/jarjarclean/Makefile,
+	  src/jarjarclean/jarjarclean: New jarjarclean utility.
+
+2008-06-14 14:58  James Le Cuirot <chewi@aura-online.co.uk>
+
+	* src/buildparser/buildparser: Mark buildparser as executable.
+
+2008-06-08 16:18  James Le Cuirot <chewi@aura-online.co.uk>
+
+	* src/buildparser/buildparser,
+	  src/javatoolkit/parser/buildproperties.py,
+	  src/javatoolkit/parser/manifest.py,
+	  src/javatoolkit/parser/tree.py: Option to wrap when returning
+	  singular values.
+
+2008-06-08 13:55  James Le Cuirot <chewi@aura-online.co.uk>
+
+	* src/javatoolkit/parser/tree.py: Don't wrap inside quotes.
+
+2008-06-08 13:55  James Le Cuirot <chewi@aura-online.co.uk>
+
+	* src/buildparser/buildparser: Allow addition of new keys.
+
+2008-06-06 10:30  James Le Cuirot <chewi@aura-online.co.uk>
+
+	* src/buildparser/buildparser,
+	  src/javatoolkit/parser/buildproperties.py,
+	  src/javatoolkit/parser/manifest.py,
+	  src/javatoolkit/parser/parser.py, src/javatoolkit/parser/tree.py:
+	  In-place editing for buildparser.
+
+2008-04-20 13:17  Petteri Räty <betelgeuse@gentoo.org>
+
+	* src/bsfix/build-xml-rewrite: Add encoding for javadoc and
+	  reorganize logic.
+
+2008-03-25 19:29  Petteri Räty <betelgeuse@gentoo.org>
+
+	* src/bsfix/build-xml-rewrite: Add a cElementTree based build.xml
+	  rewriter.
+
+2007-12-31 03:52  Alistair Bush <ali_bush@gentoo.org>
+
+	* src/maven/javatoolkit, src/maven/maven-helper.py: Reversing
+	  refactor of maven-helper. Work now to be done in branch.
+
+2007-11-28 04:34  Alistair Bush <ali_bush@gentoo.org>
+
+	* src/maven/javatoolkit, src/maven/javatoolkit/__init__.py,
+	  src/maven/javatoolkit/maven,
+	  src/maven/javatoolkit/maven/MavenPom.py,
+	  src/maven/javatoolkit/maven/__init__.py,
+	  src/maven/maven-helper.py: Committing refactor of maven-helper
+	  before updating the layout of the javatoolkit.
+
+2007-11-03 12:04  kiorky <kiorky@cryptelium.net>
+
+	* makedefs.mak: updating makefile for new version of javatoolkit
+
+2007-06-14 18:59  kiorky <kiorky@cryptelium.net>
+
+	* src/bsfix/xml-rewrite-3.py, src/maven/Makefile,
+	  src/maven/maven-helper.py: bsfix classpath rewriting improved +
+	  maven helper rewriting improvment
+
+2007-06-13 20:49  kiorky <kiorky@cryptelium.net>
+
+	* src/maven/maven-helper.py: add rewrite feature
+
+2007-05-20 18:01  kiorky <kiorky@cryptelium.net>
+
+	* src/bsfix/xml-rewrite-2.py: reverting xml-rewrite-2 to initial
+	  state
+
+2007-05-20 17:55  kiorky <kiorky@cryptelium.net>
+
+	* makedefs.mak, src/bsfix/Makefile, src/bsfix/xml-rewrite-3.py:
+	  xml-rewrite new version: xml-rewrite-3.
+
+2007-05-20 17:26  kiorky <kiorky@cryptelium.net>
+
+	* src/maven/Makefile, src/maven/maven-getpominfos.py,
+	  src/maven/maven-helper.py: minor changes to maven helper, also
+	  renamed it
+
+2007-05-20 17:10  kiorky <kiorky@cryptelium.net>
+
+	* src/bsfix/xml-rewrite-2.py: New version of xml rewrite, yet
+	  another time rewritten
+	  * all can be done one pass
+	  * + javadoc generation tool
+	  * + sax-based delete action
+
+2007-05-11 19:38  kiorky <kiorky@cryptelium.net>
+
+	* Makefile: kiorky: packaging maven toolkit
+
+2007-05-11 19:27  kiorky <kiorky@cryptelium.net>
+
+	* Makefile, src/maven/maven-getpominfos.py: kiorky: packaging maven
+	  toolkit
+
+2007-05-11 19:01  kiorky <kiorky@cryptelium.net>
+
+	* Makefile: kiorky: packaging maven toolkit
+
+2007-05-11 18:57  kiorky <kiorky@cryptelium.net>
+
+	* src/bsfix/maven-getpominfos.py, src/maven/Makefile,
+	  src/maven/maven-getpominfos.py: kiorky: packaging maven toolkit
+
+2007-05-11 18:53  kiorky <kiorky@cryptelium.net>
+
+	* src/maven: kiorky: creating maven toolkit directory
+
+2007-05-11 16:06  kiorky <kiorky@cryptelium.net>
+
+	* src/bsfix/maven-getpominfos.py: kiorky: add maven helper
+
+2007-04-11 12:13  kiorky <kiorky@cryptelium.net>
+
+	* src/bsfix/xml-rewrite-2.py: bsfix/xml-rewrite-2.py: Update the
+	  command line helper part2
+
+2007-04-11 12:11  kiorky <kiorky@cryptelium.net>
+
+	* src/bsfix/xml-rewrite-2.py: bsfix/xml-rewrite-2.py: Update the
+	  command line helper
+
+2007-04-11 12:01  kiorky <kiorky@cryptelium.net>
+
+	* src/bsfix/rewrite2-speed-test.sh,
+	  src/bsfix/xml-rewrite-2.py_tests.sh:
+	  bsfix/xml-rewrite-2.py_tests.sh: interferences with Betelgeuse :)
+
+2007-04-11 11:59  kiorky <kiorky@cryptelium.net>
+
+	* src/bsfix/xml-rewrite-2.py_tests.sh:
+	  bsfix/xml-rewrite-2.py_tests.sh: Correct some parameters
+
+2007-04-11 11:58  Petteri Räty <betelgeuse@gentoo.org>
+
+	* src/bsfix/rewrite2-speed-test.sh,
+	  src/bsfix/xml-rewrite-2.py_tests.sh: Rename
+	  xml-rewrite-2.py_tests.sh to rewrite2-speed-test.sh.
+
+2007-04-11 11:57  kiorky <kiorky@cryptelium.net>
+
+	* src/bsfix/xml-rewrite-2.py_tests.sh:
+	  bsfix/xml-rewrite-2.py_tests.sh: Correct odd path
+
+2007-04-11 11:50  kiorky <kiorky@cryptelium.net>
+
+	* src/bsfix/xml-rewrite-2.py, src/bsfix/xml-rewrite-2.py_tests.sh:
+	  bsfix/xml-rewrite-2.py_tests.sh: Make the rewrite one-pass
+
+2007-04-11 11:47  Petteri Räty <betelgeuse@gentoo.org>
+
+	* src/bsfix/xml-rewrite-2.py: Apply xml-rewrite-2 improvements from
+	  kiorky.
+
+2007-04-09 00:05  Petteri Räty <betelgeuse@gentoo.org>
+
+	* ChangeLog, ChangeLog.2004, Makefile: Rename ChangeLog to
+	  ChangeLog.2004 and remove the newest entries. From now on let's
+	  use svn2cl to create the ChangeLog.
+
+2007-04-08 23:54  Petteri Räty <betelgeuse@gentoo.org>
+
+	* src/bsfix/xml-rewrite-2.py: Remove trailing white space.
+
+2007-04-03 09:28  Petteri Räty <betelgeuse@gentoo.org>
+
+	* src/bsfix/xml-rewrite-2.py: Forgot the callback from the
+	  sys.stdin code.
+
+2007-03-13 18:11  Petteri Räty <betelgeuse@gentoo.org>
+
+	* ChangeLog, src/bsfix/Makefile, src/bsfix/tests,
+	  src/bsfix/tests/build.xml: Add some unit test for the build.xml
+	  rewriter.
+
+2007-03-13 18:09  Petteri Räty <betelgeuse@gentoo.org>
+
+	* ChangeLog, src/bsfix/xml-rewrite-2.py: Add a new
+	  --gentoo-classpath switch to xml-rewrite-2.py
+
+2006-12-31 19:14  Petteri Räty <betelgeuse@gentoo.org>
+
+	* src/bsfix/xml-rewrite-2.py: Fixing problems with encodings and
+	  relative paths.
+
+2006-12-29 12:18  Petteri Räty <betelgeuse@gentoo.org>
+
+	* ChangeLog, src/bsfix/xml-rewrite-2.py: Use Sax instead of Expat
+	  to get entities right (test on dev-java/skinlf).
+
+2006-12-27 16:23  Petteri Räty <betelgeuse@gentoo.org>
+
+	* makedefs.mak: Tagged 0.2.0.
+
+2006-12-27 16:21  Petteri Räty <betelgeuse@gentoo.org>
+
+	* Makefile, makedefs.mak: Made the tarball bzip2 and added upload
+	  target for uploading the tarball to Gentoo mirrors. Added 0.2.0
+	  as the version.
+
+2006-12-27 16:07  Petteri Räty <betelgeuse@gentoo.org>
+
+	* src/bsfix/Makefile, src/bsfix/xml-rewrite-2.py,
+	  src/bsfix/xml-rewrite2.py: Renamed xml-rewrite2.py to
+	  xml-rewrite-2.py and added Makefile things for it.
+
+2006-12-27 15:40  Petteri Räty <betelgeuse@gentoo.org>
+
+	* ChangeLog: ChangeLog entries for 0.2.0 release and
+	  xml-rewrite-2.py.
+
+2006-12-27 15:40  Petteri Räty <betelgeuse@gentoo.org>
+
+	* AUTHORS: Changed contacting karltk to contacting java@gentoo.org
+
+2006-12-27 15:26  Petteri Räty <betelgeuse@gentoo.org>
+
+	* ., .usermap, AUTHORS, COPYING, ChangeLog, INSTALL, Makefile,
+	  NEWS, README, TODO, makedefs.mak, src: Created a trunk directory
+	  to make tags possible.
+

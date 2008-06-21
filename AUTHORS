@@ -1,13 +1,14 @@
-The scripts inside src/ are written by the following authors.  Authors names are contained in the header of each file. This file is meant to only acknowledge contributions to the javatoolkit package and does not attempt to list authors by any criteria.
+karltk: Karl Trygve Kalleberg <karltk@gentoo.org>
+flessa: Fabio Lessa <flessa@gmail.com>
+chewi: James Le Cuirot <chewi@aura-online.co.uk>
+compnerd: Saleem Abdulrasool <compnerd@compnerd.org>
+betelgeuse: Petteri Räty <betelgeuse@gentoo.org>
+kiorky: kiorky <kiorky@cryptelium.net>
+ali_bush: Alistair Bush <ali_bush@gentoo.org>
+
+The scripts inside src/ are written by the above authors.  Authors names are contained in the header of each file. This file is meant to only acknowledge contributions to the javatoolkit package and does not attempt to list authors by any criteria.
 
 Javatoolkit as a whole is maintained by the Java herd. If you have questions,
 drop by #gentoo-java on freenode, or mail to <java@gentoo.org>.
-
-Karl Trygve Kalleberg <karltk@gentoo.org>
-Fabio Lessa <flessa@gmail.com>
-James Le Cuirot <chewi@aura-online.co.uk>
-Saleem Abdulrasool <compnerd@compnerd.org>
-Petteri Räty <betelgeuse@gentoo.org>
-kiorky <kiorky@cryptelium.net>
 
 If you feel that your name should be contained in this list, please contact the gentoo java project via irc, our mailing list <gentoo-java@lists.gentoo.org> or via http://bugs.gentoo.org
