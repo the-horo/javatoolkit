@@ -1,0 +1,2 @@
+recursive-include src/man/ *
+include README NEWS Changelog
