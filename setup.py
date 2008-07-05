@@ -13,7 +13,7 @@ setup (
     maintainer = 'Gentoo Java Team',
     maintainer_email = 'java@gentoo.org',
     url = 'html://www.gentoo.org',
-    packages = ["javatoolkit", "javatoolkit.maven", "javatoolkit.xml", "javatoolkit.parser"],
+    packages = ["javatoolkit", "javatoolkit.maven", "javatoolkit.xml", "javatoolkit.parser", "javatoolkit.java"],
     package_dir = { 'javatoolkit' : 'src/py/javatoolkit' },
     scripts = [
         "src/py/maven-helper.py", 
@@ -24,7 +24,8 @@ setup (
         "src/py/buildparser",
         "src/py/class-version-verify.py",
         "src/py/build-xml-rewrite",
-        "src/py/jarjarclean"
+        "src/py/jarjarclean",
+	"src/py/eclipse-build.py"
     ],
     data_files = [ ( '/usr/share/man/man1', ['src/man/findclass.1'] ) ]
 )

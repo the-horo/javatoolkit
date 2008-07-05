@@ -32,30 +32,6 @@ from javatoolkit.xml.SaxRewriter import SaxRewriter
 
 __version__ = "$Revision: 1.7 $"[11:-2]
 
-#TODO Refactor into javatoolkit.xml if ever used!
-#class ExpatRewriter(StreamRewriterBase):
-#   """
-#   The only problem with this Expat based implementation is that it does not
-#   handle entities doctypes etc properly so for example dev-java/skinlf fails.
-#   """
-#   def process(self, in_stream):
-#       from xml.parsers.expat import ParserCreate
-#       parser = ParserCreate()
-#
-#       parser.StartElementHandler = self.start_element
-#       parser.EndElementHandler = self.end_element
-#       parser.CharacterDataHandler = self.char_data
-#       parser.ParseFile(in_stream)
-#       self.p(u'\n')
-#
-#
-#   def start_element(self, name, attrs):
-#       StreamRewriterBase(self, name, attrs.iteritems())
-#
-#
-#   def end_element(self,name):
-#       self.p(u'</%s>' % name)
-
 if __name__ == '__main__':
     usage = "XML Rewrite Python Module Version " + __version__ + "\n"
     usage += "Copyright 2004,2006,2007 Gentoo Foundation\n"
