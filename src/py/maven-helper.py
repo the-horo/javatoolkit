@@ -21,7 +21,7 @@
 import sys
 import StringIO
 from optparse import OptionParser, make_option
-from javatoolkit.maven import MavenPom
+from javatoolkit.maven.MavenPom import MavenPom
 
 __version__ = "$Revision: 1.1 $"[11:-2]
 
