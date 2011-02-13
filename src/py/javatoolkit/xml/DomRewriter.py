@@ -78,7 +78,6 @@ class DomRewriter:
 
 
     def write(self,stream):
-        from xml.dom.ext import PrettyPrint
         stream.write(self.document.toxml("utf-8"))
 
 # vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap:
