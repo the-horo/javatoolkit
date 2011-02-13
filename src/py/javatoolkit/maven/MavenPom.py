@@ -185,10 +185,7 @@ class MavenPom:
                     for build_node in build_nodes:
                         build_node.appendChild(plugins_node.cloneNode(deep=True))
 
-        from xml.dom.ext import PrettyPrint
-        self.write = self.__write
-        PrettyPrint(xmldoc,self)
-        self.write = None
+        self.__write(xmldoc.toxml("utf-8"))
 
 
     def create_element(self,xmldoc,element_name,text_value=None):
