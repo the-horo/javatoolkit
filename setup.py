@@ -12,7 +12,7 @@ setup (
     description = 'Collection of Gentoo-specific tools for Java.',
     maintainer = 'Gentoo Java Team',
     maintainer_email = 'java@gentoo.org',
-    url = 'html://www.gentoo.org',
+    url = 'https://www.gentoo.org',
     packages = ["javatoolkit", "javatoolkit.maven", "javatoolkit.xml", "javatoolkit.parser", "javatoolkit.java"],
     package_dir = { 'javatoolkit' : 'src/py/javatoolkit' },
     scripts = [
