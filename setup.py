@@ -16,7 +16,7 @@ setup (
     packages = ["javatoolkit", "javatoolkit.maven", "javatoolkit.xml", "javatoolkit.parser", "javatoolkit.java"],
     package_dir = { 'javatoolkit' : 'src/py/javatoolkit' },
     scripts = [
-        "src/py/maven-helper.py", 
+        "src/py/maven-helper.py",
         "src/py/xml-rewrite-3.py",
         "src/py/findclass",
         "src/py/xml-rewrite.py",
