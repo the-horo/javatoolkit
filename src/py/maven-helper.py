@@ -40,20 +40,17 @@ def main():
     usage += "write to stdin and stdout respectively.  The use of quotes on\n"
     usage += "parameters will break the script.\n"
 
-
     def error(message):
         print("ERROR: " + message)
         sys.exit(1)
 
-
-    def doAction(stream,options):
+    def doAction(stream, options):
         pom = MavenPom(options)
         if options.p_rewrite:
             pom.parse(stream, pom.rewrite)
         elif options.p_ischild or options.p_group or options.p_dep or options.p_artifact or options.p_version:
             pom.parse(stream, pom.getDescription)
         return pom
-
 
     def run():
         if options.files:
@@ -62,16 +59,16 @@ def main():
                 # First parse the file into memory
                 cwd = os.getcwd()
                 dirname = os.path.dirname(file)
-                if dirname != '': # for file  comes out as ''
+                if dirname != '':  # for file  comes out as ''
                     os.chdir(os.path.dirname(file))
 
-                f = open(os.path.basename(file),"r")
+                f = open(os.path.basename(file), "r")
                 fs = f.read()
                 f.close()
                 # parse file and return approtiate pom object
-                pom = doAction(fs,options)
+                pom = doAction(fs, options)
                 if options.p_rewrite:
-                    f = open(os.path.basename(file),"w")
+                    f = open(os.path.basename(file), "w")
                     f.write(pom.read())
                     f.close()
                 else:
@@ -79,22 +76,72 @@ def main():
                 os.chdir(cwd)
         else:
             # process stdin
-            pom = doAction(sys.stdin.read(),options)
+            pom = doAction(sys.stdin.read(), options)
             print(pom.read())
 
 
 ############### MAIN ###############
     options_list = [
-        make_option ("-a", "--artifact", action="store_true", dest="p_artifact", help="get artifact name."),
-        make_option ("-c", "--classpath", action="append", dest="classpath", help="set classpath to use with maven."),
-        make_option ("-s", "--source", action="append", dest="p_source", help="Java source version."),
-        make_option ("-t", "--target", action="append", dest="p_target", help="Java target version."),
-        make_option ("-d", "--depependencies" , action="store_true", dest="p_dep",  help="get dependencies infos"),
-        make_option ("-f", "--file",     action="append",     dest="files",      help="Transform files instead of operating on stdout and stdin"),
-        make_option ("-g", "--group"   , action="store_true", dest="p_group",    help="get artifact group."),
-        make_option ("-r", "--rewrite",  action="store_true", dest="p_rewrite", help="rewrite poms to use our classpath"),
-        make_option ("-p", "--ischild",  action="store_true", dest="p_ischild", help="return true if this is a child pom"),
-        make_option ("-v", "--version" , action="store_true", dest="p_version",  help="get artifact version."),
+        make_option(
+            "-a",
+            "--artifact",
+            action="store_true",
+            dest="p_artifact",
+            help="get artifact name."),
+        make_option(
+            "-c",
+            "--classpath",
+            action="append",
+            dest="classpath",
+            help="set classpath to use with maven."),
+        make_option(
+            "-s",
+            "--source",
+            action="append",
+            dest="p_source",
+            help="Java source version."),
+        make_option(
+            "-t",
+            "--target",
+            action="append",
+            dest="p_target",
+            help="Java target version."),
+        make_option(
+            "-d",
+            "--depependencies",
+            action="store_true",
+            dest="p_dep",
+            help="get dependencies infos"),
+        make_option(
+            "-f",
+            "--file",
+            action="append",
+            dest="files",
+            help="Transform files instead of operating on stdout and stdin"),
+        make_option(
+            "-g",
+            "--group",
+            action="store_true",
+            dest="p_group",
+            help="get artifact group."),
+        make_option(
+            "-r",
+            "--rewrite",
+            action="store_true",
+            dest="p_rewrite",
+            help="rewrite poms to use our classpath"),
+        make_option(
+            "-p",
+            "--ischild",
+            action="store_true",
+            dest="p_ischild",
+            help="return true if this is a child pom"),
+        make_option(
+            "-v",
+            "--version",
+            action="store_true",
+            dest="p_version",
+            help="get artifact version."),
     ]
 
     parser = OptionParser(usage, options_list)
@@ -111,7 +158,7 @@ def main():
             error("Please specify only one pom at a time.")
 
     if options.p_rewrite:
-        valid_sources = ["1.4","1.5"]
+        valid_sources = ["1.4", "1.5"]
         for source in valid_sources:
             if options.p_source:
                 if len(options.p_source) != 1:
@@ -127,7 +174,7 @@ def main():
         # join any classpathes if any
         if options.classpath:
             if len(options.classpath) > 1:
-                start =[]
+                start = []
                 start.append(options.classpath[0])
                 for item in options.classpath[1:]:
                     start[0] += ":%s" % (item)
@@ -136,6 +183,7 @@ def main():
     # End Invalid Arguments Check
     # main loop
     run()
+
 
 if __name__ == '__main__':
     main()

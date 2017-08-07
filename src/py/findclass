@@ -47,17 +47,20 @@ def main():
 
     jarcmd = find_exec('jar')
 
-    javapaths = [ f.replace('.', '/') for f in files ]
-    matchers = [ re.compile(p) for p in javapaths ]  
+    javapaths = [f.replace('.', '/') for f in files]
+    matchers = [re.compile(p) for p in javapaths]
 
     for pkg in get_all_packages():
-        if opt.verbose: print("Searching package %s" % pkg)
+        if opt.verbose:
+            print("Searching package %s" % pkg)
         for jar in collect_packages(pkg).split(':'):
-            if opt.verbose: print("Searching jar %s" % jar)
+            if opt.verbose:
+                print("Searching jar %s" % jar)
             status, out = getstatusoutput("%s tvf %s" % (jarcmd, jar))
             for m in matchers:
                 if m.search(out):
-                    if opt.verbose: print("Found in %s" % pkg, end=' ')
+                    if opt.verbose:
+                        print("Found in %s" % pkg, end=' ')
                     print(jar)
 
 

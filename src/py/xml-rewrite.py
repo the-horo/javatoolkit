@@ -40,12 +40,12 @@ class IOWrapper:
 class Rewriter:
     def __init__(self, stream):
         self.stream = stream
-        self.document = parse(stream.stream);
+        self.document = parse(stream.stream)
 
     def modifyAttribute(self, elementTag, attribute, value, index=None):
         matches = self.document.getElementsByTagName(elementTag)
         if matches:
-            if index == None:
+            if index is None:
                 for match in matches:
                     match.setAttribute(attribute, value)
             else:
@@ -54,7 +54,7 @@ class Rewriter:
     def deleteAttribute(self, elementTag, attribute, index=None):
         matches = self.document.getElementsByTagName(elementTag)
         if matches:
-            if index == None:
+            if index is None:
                 for match in matches:
                     try:
                         match.removeAttribute(attribute)
@@ -71,8 +71,7 @@ class Rewriter:
 
 
 def main():
-    usage = "XML Rewrite Python Module Version " + __version__ + "\n"
-    usage += "Copyright 2004 Gentoo Foundation\n"
+    usage = "Copyright 2004 Gentoo Foundation\n"
     usage += "Distributed under the terms of the GNU General Public Lincense v2\n"
     usage += "Please contact the Gentoo Java Herd <java@gentoo.org> with problems.\n"
     usage += "\n"
@@ -84,7 +83,6 @@ def main():
     usage += "write to stdin and stdout respectively.  The use of quotes on\n"
     usage += "parameters will break the script.\n"
 
-
     def error(message):
         print("ERROR: " + message)
         sys.exit(1)
@@ -94,13 +92,42 @@ def main():
 #        usage(True)
 
     options_list = [
-        make_option ("-f", "--file", type="string", dest="file", help="Read input from file instead of stdin"),
-        make_option ("-c", "--change", action="store_true", dest="doAdd", default=False, help="Change the value of an attribute.  If it does not exist, it will be created."),
-        make_option ("-d", "--delete", action="store_true", dest="doDelete", default=False, help="Delete an attribute from matching elements."),
-        make_option ("-e", "--element", action="append", dest="elements", help="Tag of the element of which the attributes to be changed.  These can be chained for multiple elements."),
-        make_option ("-a", "--attribute", type="string", dest="attribute", help="Attribute of the matching elements to change."),
-        make_option ("-v", "--value", type="string", dest="value", help="Value to set the attribute to."),
-        make_option ("-i", "--index", type="int", dest="index", help="Index of the match.  If none is specified, the changes will be applied to all matches within the document.")
+        make_option("-f", "--file", type="string", dest="file",
+                    help="Read input from file instead of stdin"),
+        make_option(
+            "-c",
+            "--change",
+            action="store_true",
+            dest="doAdd",
+            default=False,
+            help="Change the value of an attribute.  If it does not exist, it will be created."),
+        make_option(
+            "-d",
+            "--delete",
+            action="store_true",
+            dest="doDelete",
+            default=False,
+            help="Delete an attribute from matching elements."),
+        make_option(
+            "-e",
+            "--element",
+            action="append",
+            dest="elements",
+            help="Tag of the element of which the attributes to be changed.  These can be chained for multiple elements."),
+        make_option(
+            "-a",
+            "--attribute",
+            type="string",
+            dest="attribute",
+            help="Attribute of the matching elements to change."),
+        make_option("-v", "--value", type="string", dest="value",
+                    help="Value to set the attribute to."),
+        make_option(
+            "-i",
+            "--index",
+            type="int",
+            dest="index",
+            help="Index of the match.  If none is specified, the changes will be applied to all matches within the document.")
     ]
 
     parser = OptionParser(usage, options_list)
@@ -135,7 +162,11 @@ def main():
 
     if options.doAdd:
         for element in options.elements:
-            rewriter.modifyAttribute(element, options.attribute, options.value, options.index)
+            rewriter.modifyAttribute(
+                element,
+                options.attribute,
+                options.value,
+                options.index)
 
     rewriter.write()
 

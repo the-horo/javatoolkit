@@ -7,20 +7,53 @@
 #
 # $Id$
 
-import os,sys
+import os
+import sys
 from optparse import OptionParser, make_option
 from javatoolkit.cvv import *
 
+
 def main():
     options_list = [
-        make_option ("-r", "--recurse", action="store_true", dest="deep", default=False, help="go into dirs"),
-        make_option ("-t", "--target", type="string", dest="version", help="target version that is valid"),
-        make_option ("-v", "--verbose", action="store_true", dest="verbose", default=False, help="Print version of every calss"),
-        make_option ("-s", "--silent", action="store_true", dest="silent", default=False, help="No output"),
-        make_option ("-f", "--file-only", action="store_true", dest="file_only", default=False, help="Only output the files"),
+        make_option(
+            "-r",
+            "--recurse",
+            action="store_true",
+            dest="deep",
+            default=False,
+            help="go into dirs"),
+        make_option(
+            "-t",
+            "--target",
+            type="string",
+            dest="version",
+            help="target version that is valid"),
+        make_option(
+            "-v",
+            "--verbose",
+            action="store_true",
+            dest="verbose",
+            default=False,
+            help="Print version of every calss"),
+        make_option(
+            "-s",
+            "--silent",
+            action="store_true",
+            dest="silent",
+            default=False,
+            help="No output"),
+        make_option(
+            "-f",
+            "--file-only",
+            action="store_true",
+            dest="file_only",
+            default=False,
+            help="Only output the files"),
     ]
 
-    parser = OptionParser("%prog -t version [-r] [-v] [-s] <class/jar files or dir>", options_list)
+    parser = OptionParser(
+        "%prog -t version [-r] [-v] [-s] <class/jar files or dir>",
+        options_list)
     (options, args) = parser.parse_args()
 
     if not options.version:
@@ -53,12 +86,15 @@ def main():
             for set in cvv.bad:
                 print("Bad: %s %s %s" % set)
 
-        print("CVV: %s\nChecked: %i Good: %i Bad: %i" % (options.version, len(cvv.good)+len(cvv.bad) , len(cvv.good), len(cvv.bad)))
+        print("CVV: %s\nChecked: %i Good: %i Bad: %i" %
+              (options.version, len(cvv.good) +
+               len(cvv.bad), len(cvv.good), len(cvv.bad)))
 
     if len(cvv.bad) > 0:
         sys.exit(1)
     else:
         sys.exit(0)
+
 
 if __name__ == '__main__':
     main()

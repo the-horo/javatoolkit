@@ -4,17 +4,28 @@ import sys
 import xml.etree.cElementTree as et
 from optparse import OptionParser
 
+
 def main():
     parser = OptionParser()
-    parser.add_option('-c', '--changeattributes', dest='change', action="append", nargs=3)
-    parser.add_option('-g', '--gentooclasspath', dest="gcp", action="store_true", default=False)
+    parser.add_option(
+        '-c',
+        '--changeattributes',
+        dest='change',
+        action="append",
+        nargs=3)
+    parser.add_option(
+        '-g',
+        '--gentooclasspath',
+        dest="gcp",
+        action="store_true",
+        default=False)
     parser.add_option('-e', '--encoding', dest="encoding")
     (options, args) = parser.parse_args()
 
     changes = []
     if options.change:
         for c in options.change:
-            changes.append((c[0].split(),c[1], c[2]))
+            changes.append((c[0].split(), c[1], c[2]))
 
     gcp = options.gcp
     gcp_str = '${gentoo.classpath}'
@@ -26,8 +37,8 @@ def main():
             for javac in tree.getiterator('javac'):
                 if gcp:
                     javac.attrib['classpath'] = gcp_str
-                        if options.encoding:
-                            javac.attrib['encoding'] = options.encoding
+                if options.encoding:
+                    javac.attrib['encoding'] = options.encoding
                 for javadoc in tree.getiterator('javadoc'):
                     if gcp:
                         javadoc.attrib['classpath'] = gcp_str
@@ -35,9 +46,9 @@ def main():
                             javadoc.attrib['encoding'] = options.encoding
         for c in changes:
             elems, attr, value = c
-                for elem in elems:
-                    for e in tree.getiterator(elem):
-                        e.attrib[attr] = value
+            for elem in elems:
+                for e in tree.getiterator(elem):
+                    e.attrib[attr] = value
         for junit in tree.getiterator('junit'):
             if gcp:
                 junit.append(gcp_sub)
@@ -45,6 +56,7 @@ def main():
 
         with open(file, 'w') as f:
             tree.write(f)
+
 
 if __name__ == '__main__':
     main()

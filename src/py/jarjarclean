@@ -23,7 +23,8 @@ def main():
 
         for elem in tree.getiterator():
             for child in list(elem):
-                if child.tag == 'taskdef' and child.get('classname') == 'com.tonicsystems.jarjar.JarJarTask':
+                if child.tag == 'taskdef' and child.get(
+                        'classname') == 'com.tonicsystems.jarjar.JarJarTask':
                     tags.append(child.get('name'))
                     elem.remove(child)
 
