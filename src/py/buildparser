@@ -5,8 +5,6 @@
 #
 # Licensed under the GNU General Public License, v2
 #
-# $Header:$
-
 import os
 import sys
 from optparse import OptionParser

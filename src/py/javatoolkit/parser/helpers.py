@@ -3,8 +3,6 @@
 # Copyright(c) 2004, Gentoo Foundation
 #
 # Licensed under the GNU General Public License, v2
-#
-# $Header: $
 
 def expand(root, expr, realroot = None):
     """Evaluates a path expression on a given tree.

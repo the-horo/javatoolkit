@@ -1,8 +1,5 @@
 # Copyright(c) 2006, 2008, James Le Cuirot <chewi@aura-online.co.uk>
-#
 # Licensed under the GNU General Public License, v2
-#
-# $Header: $
 
 from .tree import *
 from . import parser

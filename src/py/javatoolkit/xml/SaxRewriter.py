@@ -1,8 +1,6 @@
 # -*- coding: UTF-8 -*-
-
 # Copyright 2004-2005 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
 
 import os
 import sys
