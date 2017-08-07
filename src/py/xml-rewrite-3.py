@@ -33,7 +33,7 @@ from javatoolkit.xml.SaxRewriter import SaxRewriter
 
 
 def main():
-    usage = "XML Rewrite Python Module Version " + __version__ + "\n"
+    usage = "XML Rewrite Python Module"
     usage += "Copyright 2004,2006,2007 Gentoo Foundation\n"
     usage += "Distributed under the terms of the GNU General Public Lincense v2\n"
     usage += "Please contact the Gentoo Java Team <java@gentoo.org> with problems.\n"

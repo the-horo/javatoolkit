@@ -16,7 +16,7 @@ from javatoolkit.java.properties import PropertiesParser
 
 
 if __name__ == '__main__':
-    usage = "Eclipse Ant Build File writer " + __version__ + "\n"
+    usage = "Eclipse Ant Build File writer"
     usage += "Copyright 2008 Gentoo Foundation\n"
     usage += "Distributed under the terms of the GNU General Public Licence\n"
     usage += "Please contact the Gentoo Java Team <java@gentoo.org> with problems.\n"

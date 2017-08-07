@@ -25,7 +25,7 @@ from javatoolkit.maven.MavenPom import MavenPom
 
 
 def main():
-    usage = "XML MAVEN POM MODULE " + __version__ + "\n"
+    usage = "XML MAVEN POM MODULE"
     usage += "Copyright 2004,2006,2007 Gentoo Foundation\n"
     usage += "Distributed under the terms of the GNU General Public Lincense v2\n"
     usage += "Please contact the Gentoo Java Team <java@gentoo.org> with problems.\n"
