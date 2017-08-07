@@ -1,8 +1,6 @@
 #!/usr/bin/env python
-
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
 
 from distutils.core import setup
 
