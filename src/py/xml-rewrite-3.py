@@ -32,8 +32,6 @@ from javatoolkit.xml.DomRewriter import DomRewriter
 from javatoolkit.xml.SaxRewriter import SaxRewriter
 
 
-__version__ = "$Revision: 1.7 $"[11:-2]
-
 def main():
     usage = "XML Rewrite Python Module Version " + __version__ + "\n"
     usage += "Copyright 2004,2006,2007 Gentoo Foundation\n"

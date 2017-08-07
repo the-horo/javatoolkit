@@ -24,11 +24,7 @@ from optparse import OptionParser, make_option
 from javatoolkit.maven.MavenPom import MavenPom
 
 
-__version__ = "$Revision: 1.1 $"[11:-2]
-
-
-def main()
-
+def main():
     usage = "XML MAVEN POM MODULE " + __version__ + "\n"
     usage += "Copyright 2004,2006,2007 Gentoo Foundation\n"
     usage += "Distributed under the terms of the GNU General Public Lincense v2\n"

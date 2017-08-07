@@ -15,9 +15,6 @@ from xml.dom.minidom import parse
 from javatoolkit.java.properties import PropertiesParser
 
 
-__version__ = "$Revision: 1 $"[11:-2]
-
-
 if __name__ == '__main__':
     usage = "Eclipse Ant Build File writer " + __version__ + "\n"
     usage += "Copyright 2008 Gentoo Foundation\n"

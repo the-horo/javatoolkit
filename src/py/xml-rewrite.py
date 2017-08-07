@@ -21,9 +21,6 @@ from optparse import OptionParser, make_option
 from xml.dom import NotFoundErr
 
 
-__version__ = "$Revision: 1.6 $"[11:-2]
-
-
 class IOWrapper:
     def __init__(self, object):
         self.stream = object

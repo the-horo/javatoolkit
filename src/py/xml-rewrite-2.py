@@ -26,9 +26,6 @@ from xml.sax.saxutils import quoteattr,escape
 from optparse import OptionParser, make_option
 
 
-__version__ = "$Revision: 1.7 $"[11:-2]
-
-
 def add_gentoo_classpath(document):
 	matches = document.getElementsByTagName("classpath")
 	gcp = document.createElement("location")
