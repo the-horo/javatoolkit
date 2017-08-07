@@ -6,7 +6,7 @@ from distutils.core import setup
 
 setup (
     name = 'javatoolkit',
-    version = '0.3.0',
+    version = '0.5.0',
     description = 'Collection of Gentoo-specific tools for Java.',
     maintainer = 'Gentoo Java Team',
     maintainer_email = 'java@gentoo.org',
@@ -28,4 +28,4 @@ setup (
     data_files = [ ( '/usr/share/man/man1', ['src/man/findclass.1'] ) ]
 )
 
-#set expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap 
+#set expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap
