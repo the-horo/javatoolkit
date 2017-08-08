@@ -1,7 +1,6 @@
 # Copyright 2005, Thomas Matthijs <axxo@gentoo.org>
 # Copyright 1999-2008 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
 
 import os
 import sys
@@ -9,7 +8,7 @@ from struct import unpack
 from zipfile import ZipFile
 
 
-class cvv:
+class CVVMagic:
     def __init__(self, target):
         self.target = target
         self.good = []

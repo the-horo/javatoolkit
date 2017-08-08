@@ -4,13 +4,11 @@
 # Copyright(c) 2005, Gentoo Foundation
 #
 # Licensed under the GNU General Public License, v2
-#
-# $Id$
 
 import os
 import sys
 from optparse import OptionParser, make_option
-from javatoolkit.cvv import *
+from javatoolkit.cvv import CVVMagic
 
 
 def main():
@@ -62,35 +60,35 @@ def main():
 
     options.version = int(options.version.split(".")[-1])
 
-    cvv = cvv(options.version)
+    cvv_magic = CVVMagic(options.version)
 
     for arg in args:
         if os.path.isfile(arg):
-            cvv.do_file(arg)
+            cvv_magic.do_file(arg)
 
         if options.deep and os.path.isdir(arg):
             for root, dirs, files in os.walk(arg):
                 for filename in files:
-                    cvv.do_file("%s/%s" % (root, filename))
+                    cvv_magic.do_file("%s/%s" % (root, filename))
 
     if options.file_only:
-        lst = set([set[1] for set in cvv.bad])
+        lst = set([set[1] for set in cvv_magic.bad])
         for i in lst:
             print(i)
     else:
         if options.verbose:
-            for set in cvv.good:
+            for set in cvv_magic.good:
                 print("Good: %s %s %s" % set)
 
         if not options.silent:
-            for set in cvv.bad:
+            for set in cvv_magic.bad:
                 print("Bad: %s %s %s" % set)
 
         print("CVV: %s\nChecked: %i Good: %i Bad: %i" %
-              (options.version, len(cvv.good) +
-               len(cvv.bad), len(cvv.good), len(cvv.bad)))
+              (options.version, len(cvv_magic.good) +
+               len(cvv_magic.bad), len(cvv_magic.good), len(cvv_magic.bad)))
 
-    if len(cvv.bad) > 0:
+    if len(cvv_magic.bad) > 0:
         sys.exit(1)
     else:
         sys.exit(0)
