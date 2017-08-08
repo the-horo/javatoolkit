@@ -16,9 +16,9 @@ class CVVMagic:
 
     def add(self, version, jar, file):
         if version <= self.target:
-            self.good.append(("1."+str(version), jar, file))
+            self.good.append(("1.%s" % (version), jar, file))
         else:
-            self.bad.append(("1."+str(version), jar, file))
+            self.bad.append(("1.%s" % (version), jar, file))
 
     def do_class(self,filename):
         classFile = file(filename,"rb")
