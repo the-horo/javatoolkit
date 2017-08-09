@@ -204,21 +204,20 @@ class SaxRewriter(XMLGenerator, StreamRewriterBase):
 
 
 def main():
-    usage = "Copyright 2004,2006,2007 Gentoo Foundation\n"
-    usage += "Distributed under the terms of the GNU General Public Lincense v2\n"
-    usage += "Please contact the Gentoo Java Team <java@gentoo.org> with problems.\n"
-    usage += "\n"
-    usage += "Usage:\n"
-    usage += "	xml-rewrite.py [-f file] --delete [-g] -e tag [-e tag] -a attribute [-a attribute] [-i index]\n"
-    usage += "	xml-rewrite.py [-f file] --change [-g] -e tag [-e tag] -a attribute -v value [-a attribute -v value] \\\n"
-    usage += "			[--source-element tag] [--source-attribute attribute --source-value value] \\\n"
-    usage += "			[--target-element tag] [--target-attribute attribute --target-value value] [-i index]\n"
-    usage += "Or:\n"
-    usage += "	xml-rewrite.py [-f file] -g\n"
-    usage += "\n"
-    usage += "If the -f parameter is not utilized, the script will read and\n"
-    usage += "write to stdin and stdout respectively.  The use of quotes on\n"
-    usage += "parameters will break the script.\n"
+    usage = """Copyright 2004, 2006, 2007, 2017 Gentoo Foundation
+Distributed under the terms of the GNU General Public Lincense v2
+Please contact the Gentoo Java Team <java@gentoo.org> with problems.
+Usage:
+    xml-rewrite.py [-f file] --delete [-g] -e tag [-e tag] -a attribute [-a attribute] [-i index]
+    xml-rewrite.py [-f file] --change [-g] -e tag [-e tag] -a attribute -v value [-a attribute -v value]
+	[--source-element tag] [--source-attribute attribute --source-value value]
+	[--target-element tag] [--target-attribute attribute --target-value value] [-i index]
+Or:
+    xml-rewrite.py [-f file] -g
+
+If the -f parameter is not utilized, the script will read and
+write to stdin and stdout respectively. The use of quotes on
+parameters will break the script."""
 
     def error(message):
         print("ERROR: " + message)
