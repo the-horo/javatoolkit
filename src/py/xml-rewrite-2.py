@@ -111,7 +111,7 @@ class StreamRewriterBase:
         self.targetValues = targetValues or []
 
     def p(self, str):
-        self.__write(str.encode('utf8'))
+        self.__write(str)
 
     def write(self, out_stream):
         value = self.buffer.getvalue()
