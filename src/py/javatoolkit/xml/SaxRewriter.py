@@ -115,7 +115,7 @@ class SaxRewriter(XMLGenerator):
 
 
     def p(self,str):
-        self.buffer.write(str.encode('utf8'))
+        self.buffer.write(str)
 
 
     def write_attr(self,a,v):
@@ -125,7 +125,7 @@ class SaxRewriter(XMLGenerator):
     def process(self, in_stream, callback):
         self.startElement = callback
         from xml.sax import parseString
-        parseString(in_stream, self)
+        parseString(in_stream.encode('UTF8'), self)
         self.p('\n')
 
 # vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap:
