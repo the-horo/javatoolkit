@@ -1,3 +1,7 @@
+javatoolkit-0.5.1 (10 Aug 2017)
+===============================
+ - Fix encoding and string related issues.
+
 javatoolkit-0.5.0 (08 Aug 2017)
 ===============================
  - Fix imports with Python 3.
