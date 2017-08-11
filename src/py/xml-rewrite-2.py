@@ -2,10 +2,12 @@
 # Copyright 2004-2006 Gentoo Foundation
 # Distributed under the terms of the GNU General Public Licence v2
 
+
 import sys
 import io
 from xml.sax.saxutils import quoteattr, escape
 from optparse import OptionParser, make_option
+from xml.sax.saxutils import XMLGenerator
 
 
 def add_gentoo_classpath(document):
@@ -157,9 +159,6 @@ class ExpatRewriter(StreamRewriterBase):
 
     def char_data(self, data):
         self.p(escape(data))
-
-
-from xml.sax.saxutils import XMLGenerator
 
 
 class SaxRewriter(XMLGenerator, StreamRewriterBase):
