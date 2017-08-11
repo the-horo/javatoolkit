@@ -204,8 +204,6 @@ parameters will break the script."""
         print("ERROR: " + message)
         sys.exit(1)
 
-#	if len(sys.argv) == 1:
-#		usage(True)
     options_list = [
         make_option(
             "-f",
@@ -320,8 +318,7 @@ parameters will break the script."""
             if options.doAdd and (len(options.values or []) != len(options.attributes or [])
                                   or len(options.source_values or []) != len(options.source_attributes or [])
                                   or len(options.target_values or []) != len(options.target_attributes or [])):
-                error(
-                    "You must give attribute(s)/value(s) for every element you are changing.")
+                error("You must give attribute(s)/value(s) for every element you are changing.")
 
         # End Invalid Arguments Check
 
@@ -354,17 +351,16 @@ parameters will break the script."""
             dirname = os.path.dirname(file)
             if dirname != '':  # for file = build.xml comes out as ''
                 os.chdir(os.path.dirname(file))
-            f = open(os.path.basename(file), "r")
-            if options.gentoo_classpath:
-                rewriter.process(f, add_gentoo_classpath)
-            else:
-                rewriter.process(f)
-            os.chdir(cwd)
-            f.close()
-            # Then write it back to the file
-            f = open(file, "w")
-            rewriter.write(f)
-            f.close()
+
+            with open(os.path.basename(file), 'r') as f:
+                if options.gentoo_classpath:
+                    rewriter.process(f, add_gentoo_classpath)
+                else:
+                    rewriter.process(f)
+
+            # Then write it back out to the file
+            with open(file, 'w') as f:
+                rewriter.write(f)
 
     else:
         if options.gentoo_classpath:
