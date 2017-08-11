@@ -82,15 +82,15 @@ class StreamRewriterBase:
                  targetElems=[], targetAttributes=[], targetValues=[]):
         self.buffer = io.StringIO()
         self.__write = self.buffer.write
-        self.elems = elems or []
-        self.attributes = attributes or []
-        self.values = values or []
-        self.sourceElems = sourceElems or []
-        self.sourceAttributes = sourceAttributes or []
-        self.sourceValues = sourceValues or []
-        self.targetElems = targetElems or []
-        self.targetAttributes = targetAttributes or []
-        self.targetValues = targetValues or []
+        self.elems = elems
+        self.attributes = attributes
+        self.values = values
+        self.sourceElems = sourceElems
+        self.sourceAttributes = sourceAttributes
+        self.sourceValues = sourceValues
+        self.targetElems = targetElems
+        self.targetAttributes = targetAttributes
+        self.targetValues = targetValues
 
     def p(self, str):
         self.__write(str)
