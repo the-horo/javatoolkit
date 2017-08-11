@@ -186,17 +186,20 @@ class SaxRewriter(XMLGenerator, StreamRewriterBase):
 
 def main():
     usage = """Copyright 2004, 2006, 2007, 2017 Gentoo Foundation
-Distributed under the terms of the GNU General Public Lincense v2
-Please contact the Gentoo Java Team <java@gentoo.org> with problems.
-Usage:
-    xml-rewrite.py [-f file] --delete [-g] -e tag [-e tag] -a attribute [-a attribute] [-i index]
-    xml-rewrite.py [-f file] --change [-g] -e tag [-e tag] -a attribute -v value [-a attribute -v value]
-	[--source-element tag] [--source-attribute attribute --source-value value]
-	[--target-element tag] [--target-attribute attribute --target-value value] [-i index]
-Or:
-    xml-rewrite.py [-f file] -g
+Distributed under the terms of the GNU General Public Licence v2
 
-If the -f parameter is not utilized, the script will read and
+Reach out to the Gentoo Java Team <java@gentoo.org> for questions/problems.
+
+Usage:
+    xml-rewrite-2.py [-f file] --delete [-g] -e tag [-e tag] -a attribute [-a attribute] [-i index]
+    xml-rewrite-2.py [-f file] --change [-g] -e tag [-e tag] -a attribute -v value [-a attribute -v value]
+    xml-rewrite-2.py [-f file] -g
+
+Additional parameters:
+    [--source-element tag] [--source-attribute attribute --source-value value]
+    [--target-element tag] [--target-attribute attribute --target-value value] [-i index]
+
+If the -f parameter is not used, the script will read and
 write to stdin and stdout respectively. The use of quotes on
 parameters will break the script."""
 

@@ -12,35 +12,27 @@ from javatoolkit.xml.SaxRewriter import SaxRewriter
 
 
 def main():
-    usage = "XML Rewrite Python Module"
-    usage += "Copyright 2004,2006,2007 Gentoo Foundation\n"
-    usage += "Distributed under the terms of the GNU General Public Lincense v2\n"
-    usage += "Please contact the Gentoo Java Team <java@gentoo.org> with problems.\n"
-    usage += "\n"
-    usage += "Usage:\n"
-    usage += "  " + \
-        sys.argv[0] + " [-f file] --delete [-g] -n tag [-n tag] -m attribute [-m attribute] [-i index]\n"
-    usage += "  " + \
-        sys.argv[0] + " [-f file] --change [-g] -e tag [-e tag] -a attribute -v value [-a attribute -v value] \\\n"
-    usage += "          [--source-element tag] [--source-attribute attribute --source-value value] \\\n"
-    usage += "          [--target-element tag] [--target-attribute attribute --target-value value] [-i index]\n"
-    usage += "Or:\n"
-    usage += "  " + \
-        sys.argv[0] + " [-f file] --javadoc --source-directory dir [--source-directory dir2] --output-directory dir3 \n"
-    usage += "Or:\n"
-    usage += "  " + sys.argv[0] + " [-f file] -g\n"
-    usage += "\n"
-    usage += "Or:\n"
-    usage += "  " + sys.argv[0] + " [-f file] --maven-cleaning\n"
-    usage += "\n"
-    usage += "Or for more detailed help:\n"
-    usage += "  " + sys.argv[0] + " -h\n"
-    usage += "\n"
-    usage += "Multiple actions can be done simultaneously\n"
-    usage += "\n"
-    usage += "If the -f parameter is not utilized, the script will read and\n"
-    usage += "write to stdin and stdout respectively.  The use of quotes on\n"
-    usage += "parameters will break the script.\n"
+    usage = """Copyright 2004, 2006, 2007, 2017 Gentoo Foundation
+Distributed under the terms of the GNU General Public Licence v2
+
+Reach out to the Gentoo Java Team <java@gentoo.org> for questions/problems.
+
+Usage:
+    xml-rewrite-3.py [-f file] --delete [-g] -n tag [-n tag] -m attribute [-m attribute] [-i index]
+    xml-rewrite-3.py [-f file] --change [-g] -e tag [-e tag] -a attribute -v value [-a attribute -v value]
+    xml-rewrite-3.py [-f file] --javadoc --source-directory dir [--source-directory dir2] --output-directory dir3
+    xml-rewrite-3.py [-f file] --maven-cleaning
+    xml-rewrite-3.py [-f file] -g
+
+Additional parameters:
+    [--source-element tag] [--source-attribute attribute --source-value value]
+    [--target-element tag] [--target-attribute attribute --target-value value] [-i index]
+
+Multiple actions can be done simultaneously.
+
+If the -f parameter is not used, the script will read and
+write to stdin and stdout respectively. The use of quotes on
+parameters will break the script."""
 
     def error(message):
         print("ERROR: " + message)
@@ -245,7 +237,6 @@ def main():
             action="append",
             dest="mavenMultiProjectsDirs",
             help="Dirs in classpath notation"),
-
         make_option(
             "-t",
             "--source-attribute",
@@ -265,6 +256,7 @@ def main():
             dest="source_values",
             help="Value to set the attribute to. (sourceonly)")
     ]
+
     parser = OptionParser(usage, options_list)
     (options, args) = parser.parse_args()
 
