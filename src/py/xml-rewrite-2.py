@@ -1,24 +1,6 @@
 #!/usr/bin/env python3
-# -*- coding: UTF-8 -*-
-# vim: set ai ts=8 sts=0 sw=8 tw=0 noexpandtab:
-
 # Copyright 2004-2006 Gentoo Foundation
 # Distributed under the terms of the GNU General Public Licence v2
-
-# Authors:
-#	Saleem Abdulrasool <compnerd@compnerd.org>
-#	Petteri Räty <betelgeuse@gentoo.org>
-# Maintainer: Gentoo Java Herd <java@gentoo.org>
-# Python based XML modifier
-
-# ChangeLog
-# Petteri Räty <betelgeuse@gentoo.org
-#	   December 06, 2006 - Changed to use xml.parsers.expat and basically rewrote the whole file
-#	   December 29, 2006 - Added a SAX based implementation to handle entities etc ( test on dev-java/skinlf )
-# Saleem A. <compnerd@compnerd.org>
-#	   December 23, 2004 - Initial Write
-#	   December 24, 2004 - Added usage information
-
 
 import sys
 import io
