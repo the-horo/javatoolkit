@@ -79,7 +79,7 @@ class DomRewriter:
 
 
 class StreamRewriterBase:
-    def __init__(self, elems=[], attributes=[], values=[], index,
+    def __init__(self, elems, attributes, values, index,
                  sourceElems=[], sourceAttributes=[], sourceValues=[],
                  targetElems=[], targetAttributes=[], targetValues=[]):
         self.buffer = io.StringIO()
@@ -170,6 +170,20 @@ class SaxRewriter(XMLGenerator, StreamRewriterBase):
     def __init__(self, elems, attributes, values, index,
                  sourceElems=[], sourceAttributes=[], sourceValues=[],
                  targetElems=[], targetAttributes=[], targetValues=[]):
+        if not sourceElems:
+            sourceElems = []
+        if not sourceAttributes:
+            sourceAttributes = []
+        if not sourceValues:
+            sourceValues = []
+        if not targetElems:
+            targetElems = []
+        if not targetAttributes:
+            targetAttributes = []
+        if not targetValues:
+            targetValues = []
+        if not index:
+            index = 0
         StreamRewriterBase.__init__(self, elems, attributes, values, index,
                                     sourceElems, sourceAttributes, sourceValues,
                                     targetElems, targetAttributes, targetValues)
@@ -327,9 +341,9 @@ parameters will break the script."""
 
     def get_rewriter(options):
         if options.index or options.doDelete or options.gentoo_classpath:
-                    # java-ant-2.eclass does not use these options so we can optimize the ExpatWriter
-                # and let the DomRewriter do these. Also keeps the index option
-                # compatible for sure.
+            # java-ant-2.eclass does not use these options so we can optimize the ExpatWriter
+            # and let the DomRewriter do these. Also keeps the index option
+            # compatible for sure.
             rewriter = DomRewriter(
                 options.elements,
                 options.attributes,
