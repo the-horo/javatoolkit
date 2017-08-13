@@ -1,18 +1,6 @@
 #!/usr/bin/env python3
-# -*- coding: UTF-8 -*-
-
 # Copyright 2004 Gentoo Foundation
 # Distributed under the terms of the GNU General Public Licence v2
-# $Header: /var/cvsroot/gentoo-src/javatoolkit/src/bsfix/xml-rewrite.py,v 1.6 2005/07/19 10:35:18 axxo Exp $
-
-# Author: Saleem Abdulrasool <compnerd@compnerd.org>
-# Maintainer: Gentoo Java Herd <java@gentoo.org>
-# Python based XML modifier
-
-# ChangeLog
-# Saleem A. <compnerd@compnerd.org>
-#      December 23, 2004 - Initial Write
-#      December 24, 2004 - Added usage information
 
 
 import sys
@@ -86,10 +74,6 @@ def main():
     def error(message):
         print("ERROR: " + message)
         sys.exit(1)
-
-
-#    if len(sys.argv) == 1:
-#        usage(True)
 
     options_list = [
         make_option("-f", "--file", type="string", dest="file",
