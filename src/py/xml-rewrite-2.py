@@ -79,7 +79,7 @@ class DomRewriter:
 
 
 class StreamRewriterBase:
-    def __init__(self, elems, attributes, values, index,
+    def __init__(self, elems=[], attributes=[], values=[], index,
                  sourceElems=[], sourceAttributes=[], sourceValues=[],
                  targetElems=[], targetAttributes=[], targetValues=[]):
         self.buffer = io.StringIO()
