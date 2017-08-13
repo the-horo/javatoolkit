@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
-#
 # Copyright(c) 2005, Thomas Matthijs <axxo@gentoo.org>
 # Copyright(c) 2005, Gentoo Foundation
-#
-# Licensed under the GNU General Public License, v2
+# Distributed under the terms of the GNU General Public Licence v2
 
 import os
 import sys
