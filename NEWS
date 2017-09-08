@@ -1,3 +1,7 @@
+javatoolkit-0.6.0 (10 Aug 2017)
+===============================
+ - Port to Python 3 complete (hopefully).
+
 javatoolkit-0.5.1 (10 Aug 2017)
 ===============================
  - xml-rewrite-2.py, xml-rewrite-2.py, SaxRewriter.py: fix encoding and string related issues.
