@@ -71,6 +71,6 @@ class DomRewriter:
 
 
     def write(self,stream):
-        stream.write(self.document.toxml("utf-8"))
+        stream.write(self.document.toxml('utf-8').decode('utf-8'))
 
 # vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap:
