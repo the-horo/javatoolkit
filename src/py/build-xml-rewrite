@@ -54,7 +54,7 @@ def main():
                 junit.append(gcp_sub)
                 junit.attrib['haltonfailure'] = 'true'
 
-        with open(file, 'w') as f:
+        with open(file, 'wb') as f:
             tree.write(f)
 
 
