@@ -375,6 +375,8 @@ parameters will break the script."""
                 else:
                     rewriter.process(f)
 
+            os.chdir(cwd)
+
             # Then write it back out to the file
             with open(file, 'w') as f:
                 rewriter.write(f)
