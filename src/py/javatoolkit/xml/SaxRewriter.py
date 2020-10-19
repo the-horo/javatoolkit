@@ -1,13 +1,16 @@
 # -*- coding: UTF-8 -*-
-# Copyright 2004-2005 Gentoo Foundation
+# Copyright 2004-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
+import io
 import os
 import sys
-import io
 
+import xml.sax.handler
 from xml.sax.saxutils import XMLGenerator
 from xml.sax.saxutils import quoteattr
+
+import javatoolkit.xml.sax
 
 class SaxRewriter(XMLGenerator):
     """
@@ -124,8 +127,7 @@ class SaxRewriter(XMLGenerator):
 
     def process(self, in_stream, callback):
         self.startElement = callback
-        from xml.sax import parseString
-        parseString(in_stream.encode('UTF8'), self)
+        javatoolkit.xml.sax.parse_string(in_stream.encode('UTF8'), content_handler=self, features={xml.sax.handler.feature_external_ges: 1})
         self.p('\n')
 
 # vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap:

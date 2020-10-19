@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
-# Copyright 2004-2006 Gentoo Foundation
-# Distributed under the terms of the GNU General Public Licence v2
+# Copyright 2004-2020 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
 
 
-import sys
 import io
-from xml.sax.saxutils import quoteattr, escape
+import sys
+
 from optparse import OptionParser, make_option
-from xml.sax.saxutils import XMLGenerator
+
+import xml.sax.handler
+from xml.sax.saxutils import XMLGenerator, escape, quoteattr
+
+import javatoolkit.xml.sax
 
 
 def add_gentoo_classpath(document):
@@ -190,8 +194,7 @@ class SaxRewriter(XMLGenerator, StreamRewriterBase):
         XMLGenerator.__init__(self, self.buffer, 'UTF-8')
 
     def process(self, in_stream):
-        from xml.sax import parse
-        parse(in_stream, self)
+        javatoolkit.xml.sax.parse(in_stream, content_handler=self, features={xml.sax.handler.feature_external_ges: 1})
         self.p('\n')
 
     def startElement(self, name, attrs):
