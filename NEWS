@@ -1,3 +1,6 @@
+0.6.4 (05 Nov 2020)
+- Fix bug #698954.
+
 0.6.3 (15 Jul 2020)
 - xml-rewrite-2.py: add back os.chdir() function call.
 
