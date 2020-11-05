@@ -1,44 +1,32 @@
-javatoolkit-0.6.3 (15 Jul 2020)
-===============================
- - xml-rewrite-2.py: add back os.chdir() function call.
+0.6.3 (15 Jul 2020)
+- xml-rewrite-2.py: add back os.chdir() function call.
 
-javatoolkit-0.6.2 (29 Oct 2019)
-===============================
- - Fix bug #667590.
+0.6.2 (29 Oct 2019)
+- Fix bug #667590.
 
-javatoolkit-0.6.1 (29 Oct 2019)
-===============================
- - Fix bug #698686.
+0.6.1 (29 Oct 2019)
+- Fix bug #698686.
 
-javatoolkit-0.6.0 (10 Aug 2017)
-===============================
- - Port to Python 3 complete (hopefully).
+0.6.0 (10 Aug 2017)
+- Port to Python 3 complete (hopefully).
 
-javatoolkit-0.5.1 (10 Aug 2017)
-===============================
- - xml-rewrite-2.py, xml-rewrite-2.py, SaxRewriter.py: fix encoding and string related issues.
- - Python 2 support is gone as far as these files are concerned.
+0.5.1 (10 Aug 2017)
+- xml-rewrite-2.py, xml-rewrite-2.py, SaxRewriter.py: fix encoding and string related issues.
+- Python 2 support is gone as far as these files are concerned.
 
-javatoolkit-0.5.0 (08 Aug 2017)
-===============================
- - Fix imports with Python 3.
- - More cleanup.
+0.5.0 (08 Aug 2017)
+- Fix imports with Python 3.
+- More cleanup.
 
-javatoolkit-0.4.0 (07 Aug 2017)
-===============================
- - Port to Python 3.
+0.4.0 (07 Aug 2017)
+- Port to Python 3.
 
-javatoolkit-0.3.0 (19 Jun 2008)
-===============================
- - Files reorganised into a tidier structure.
- - Shared code now installed in Python's site-packages.
- - xml-rewrite-3.py now rewrites the classpath in a simpler but more reliable
-   way by adding new elements instead of replacing existing ones.
- - buildparser now supports in-place editing, optional wrapping of singular
-   values, addition of new keys and it no longer wraps inside quotes.
- - New jarjarclean utility for converting jarjar tasks in build.xml files into
-   regular jar tasks.
-
-Some time before that...
-========================
- - Stuff happened.
+0.3.0 (19 Jun 2008)
+- Files reorganised into a tidier structure.
+- Shared code now installed in Python's site-packages.
+- xml-rewrite-3.py now rewrites the classpath in a simpler but more reliable
+  way by adding new elements instead of replacing existing ones.
+- buildparser now supports in-place editing, optional wrapping of singular
+  values, addition of new keys and it no longer wraps inside quotes.
+- New jarjarclean utility for converting jarjar tasks in build.xml files into
+  regular jar tasks.
