@@ -1,3 +1,15 @@
+javatoolkit-0.6.3 (15 Jul 2020)
+===============================
+ - xml-rewrite-2.py: add back os.chdir() function call.
+
+javatoolkit-0.6.2 (29 Oct 2019)
+===============================
+ - Fix bug #667590.
+
+javatoolkit-0.6.1 (29 Oct 2019)
+===============================
+ - Fix bug #698686.
+
 javatoolkit-0.6.0 (10 Aug 2017)
 ===============================
  - Port to Python 3 complete (hopefully).
