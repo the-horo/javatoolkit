@@ -56,8 +56,6 @@ def main():
         print("-t is mandatory")
         sys.exit(2)
 
-    options.version = int(options.version.split(".")[-1])
-
     cvv_magic = CVVMagic(options.version)
 
     for arg in args:

@@ -10,18 +10,28 @@ from zipfile import ZipFile
 
 class CVVMagic:
     def __init__(self, target):
-        self.target = target
+        # this is a number 8 9 10 11 etc, not including 1.
+        if '.' in target:
+            self.target = int(target.split(".")[-1])
+        else:
+            self.target = int(target)
         self.good = []
         self.bad = []
         self.skipped = []
 
     def add(self, version, jar, file):
         if file == "module-info.class" and self.target < 9:
-            self.skipped.append(("1.%s" % (version), jar, file))
+            self.skipped.append((version, jar, file))
         elif version <= self.target:
-            self.good.append(("1.%s" % (version), jar, file))
+            if version < 9:
+                self.good.append(("1.%s" % (version), jar, file))
+            else:
+                self.good.append((version, jar, file))
         else:
-            self.bad.append(("1.%s" % (version), jar, file))
+            if version < 9:
+                self.bad.append(("1.%s" % (version), jar, file))
+            else:
+                self.bad.append((version, jar, file))
 
     def do_class(self,filename):
         classFile = file(filename,"rb")
