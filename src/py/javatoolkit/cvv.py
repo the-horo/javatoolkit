@@ -13,9 +13,12 @@ class CVVMagic:
         self.target = target
         self.good = []
         self.bad = []
+        self.skipped = []
 
     def add(self, version, jar, file):
-        if version <= self.target:
+        if file == "module-info.class" and self.target < 9:
+            self.skipped.append(("1.%s" % (version), jar, file))
+        elif version <= self.target:
             self.good.append(("1.%s" % (version), jar, file))
         else:
             self.bad.append(("1.%s" % (version), jar, file))

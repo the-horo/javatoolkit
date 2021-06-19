@@ -81,10 +81,12 @@ def main():
         if not options.silent:
             for set in cvv_magic.bad:
                 print("Bad: %s %s %s" % set)
+            for set in cvv_magic.skipped:
+                print("Skipped: %s %s %s" % set)
 
-        print("CVV: %s\nChecked: %i Good: %i Bad: %i" %
-              (options.version, len(cvv_magic.good) +
-               len(cvv_magic.bad), len(cvv_magic.good), len(cvv_magic.bad)))
+        print("CVV: %s\nChecked: %i Good: %i Bad: %i Skipped: %i" %
+              (options.version, len(cvv_magic.good) + len(cvv_magic.bad) + len(cvv_magic.skipped),
+              len(cvv_magic.good), len(cvv_magic.bad), len(cvv_magic.skipped)))
 
     if len(cvv_magic.bad) > 0:
         sys.exit(1)
