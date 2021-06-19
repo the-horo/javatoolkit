@@ -30,7 +30,7 @@ def main():
             action="store_true",
             dest="verbose",
             default=False,
-            help="Print version of every calss"),
+            help="Print version of every class"),
         make_option(
             "-s",
             "--silent",
