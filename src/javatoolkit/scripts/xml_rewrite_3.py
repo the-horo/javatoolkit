@@ -7,8 +7,8 @@ import os
 import sys
 import io
 from optparse import OptionParser, make_option
-from javatoolkit.xml.DomRewriter import DomRewriter
-from javatoolkit.xml.SaxRewriter import SaxRewriter
+from ..xml.DomRewriter import DomRewriter
+from ..xml.SaxRewriter import SaxRewriter
 
 
 def main():

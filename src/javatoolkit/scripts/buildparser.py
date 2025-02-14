@@ -9,12 +9,10 @@ import os
 import sys
 from optparse import OptionParser
 
-sys.path.insert(0, "/usr/share/javatoolkit/pym")
-
-from javatoolkit.parser.parser import Parser
-from javatoolkit.parser.buildproperties import BuildPropertiesParser
-from javatoolkit.parser.manifest import ManifestParser
-from javatoolkit.parser.tree import Node, ParseError
+from ..parser.parser import Parser
+from ..parser.buildproperties import BuildPropertiesParser
+from ..parser.manifest import ManifestParser
+from ..parser.tree import Node, ParseError
 
 __author__ = ["James Le Cuirot <chewi@aura-online.co.uk>",
               "Karl Trygve Kalleberg <karltk@gentoo.org>"]

@@ -34,7 +34,7 @@ class CVVMagic:
                 self.bad.append((version, jar, file))
 
     def do_class(self,filename):
-        classFile = file(filename,"rb")
+        classFile = open(filename,"rb")
         classFile.seek(4)
         temp = classFile.read(4)
         (version,) = unpack('>xxh',temp)

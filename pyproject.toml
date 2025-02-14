@@ -1,0 +1,39 @@
+[build-system]
+requires = ["flit_core >=3.8,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "javatoolkit"
+version = "0.6.8"
+description = "Collection of Gentoo-specific tools for Java"
+readme = "README"
+license = {file = "COPYING"}
+requires-python = "~=3.10"
+authors = [{name = "Gentoo Java Team", email = "java@gentoo.org"}]
+maintainers = [{name = "Gentoo Java Team", email = "java@gentoo.org"}]
+classifiers = [
+	"License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
+	"Programming Language :: Python :: 3.10",
+	"Programming Language :: Python :: 3.11",
+	"Programming Language :: Python :: 3.12",
+	"Programming Language :: Python :: 3.13",
+]
+
+[project.urls]
+Homepage = "https://wiki.gentoo.org/wiki/Project:Java"
+Source = "https://gitweb.gentoo.org/proj/javatoolkit.git/"
+
+[project.scripts]
+"maven-helper.py" = "javatoolkit.scripts.maven_helper:main"
+"xml-rewrite-3.py" = "javatoolkit.scripts.xml_rewrite_3:main"
+findclass = "javatoolkit.scripts.findclass:main"
+"xml-rewrite.py" = "javatoolkit.scripts.xml_rewrite:main"
+"xml-rewrite-2.py" = "javatoolkit.scripts.xml_rewrite_2:main"
+buildparser = "javatoolkit.scripts.buildparser:main"
+"class-version-verify.py" = "javatoolkit.scripts.class_version_verify:main"
+build-xml-rewrite = "javatoolkit.scripts.build_xml_rewrite:main"
+jarjarclean = "javatoolkit.scripts.jarjarclean:main"
+"eclipse-build.py" = "javatoolkit.scripts.eclipse_build:main"
+
+[tool.flit.external-data]
+directory = "data"

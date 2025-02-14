@@ -1,3 +1,6 @@
+0.6.8 (???)
+- Migrate build-system to flit with pyproject.toml
+
 0.6.7 (19 Jun 2021)
 - Correctly handling Java versions in class-version-verify.py.
 

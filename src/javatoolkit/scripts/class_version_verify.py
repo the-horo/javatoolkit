@@ -6,7 +6,7 @@
 import os
 import sys
 from optparse import OptionParser, make_option
-from javatoolkit.cvv import CVVMagic
+from ..cvv import CVVMagic
 
 
 def main():

@@ -12,10 +12,9 @@ import os
 import sys
 from optparse import OptionParser, make_option
 from xml.dom.minidom import parse
-from javatoolkit.java.properties import PropertiesParser
+from ..java.properties import PropertiesParser
 
-
-if __name__ == '__main__':
+def main():
     usage = "Eclipse Ant Build File writer"
     usage += "Copyright 2008 Gentoo Foundation\n"
     usage += "Distributed under the terms of the GNU General Public Licence\n"
@@ -133,5 +132,9 @@ if __name__ == '__main__':
             # output.write('')
             # output.write('')
             # output.write('')
+
+
+if __name__ == '__main__':
+    main()
 
 # vim:set expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap :

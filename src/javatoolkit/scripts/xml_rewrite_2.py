@@ -11,7 +11,7 @@ from optparse import OptionParser, make_option
 import xml.sax.handler
 from xml.sax.saxutils import XMLGenerator, escape, quoteattr
 
-import javatoolkit.xml.sax
+from ..xml import sax
 
 
 def add_gentoo_classpath(document):
@@ -194,7 +194,7 @@ class SaxRewriter(XMLGenerator, StreamRewriterBase):
         XMLGenerator.__init__(self, self.buffer, 'UTF-8')
 
     def process(self, in_stream):
-        javatoolkit.xml.sax.parse(in_stream, content_handler=self, features={xml.sax.handler.feature_external_ges: 1})
+        sax.parse(in_stream, content_handler=self, features={xml.sax.handler.feature_external_ges: 1})
         self.p('\n')
 
     def startElement(self, name, attrs):

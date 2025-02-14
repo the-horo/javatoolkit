@@ -21,7 +21,7 @@
 import sys
 import io
 from optparse import OptionParser, make_option
-from javatoolkit.maven.MavenPom import MavenPom
+from ..maven.MavenPom import MavenPom
 
 
 def main():

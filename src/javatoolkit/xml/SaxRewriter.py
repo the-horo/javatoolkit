@@ -10,7 +10,7 @@ import xml.sax.handler
 from xml.sax.saxutils import XMLGenerator
 from xml.sax.saxutils import quoteattr
 
-import javatoolkit.xml.sax
+from . import sax
 
 class SaxRewriter(XMLGenerator):
     """
@@ -127,7 +127,7 @@ class SaxRewriter(XMLGenerator):
 
     def process(self, in_stream, callback):
         self.startElement = callback
-        javatoolkit.xml.sax.parse_string(in_stream.encode('UTF8'), content_handler=self, features={xml.sax.handler.feature_external_ges: 1})
+        sax.parse_string(in_stream.encode('UTF8'), content_handler=self, features={xml.sax.handler.feature_external_ges: 1})
         self.p('\n')
 
 # vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 nowrap:
