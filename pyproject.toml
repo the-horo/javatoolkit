@@ -25,13 +25,9 @@ Source = "https://gitweb.gentoo.org/proj/javatoolkit.git/"
 
 [project.scripts]
 "maven-helper.py" = "javatoolkit.scripts.maven_helper:main"
-"xml-rewrite-3.py" = "javatoolkit.scripts.xml_rewrite_3:main"
 findclass = "javatoolkit.scripts.findclass:main"
-"xml-rewrite.py" = "javatoolkit.scripts.xml_rewrite:main"
-"xml-rewrite-2.py" = "javatoolkit.scripts.xml_rewrite_2:main"
 buildparser = "javatoolkit.scripts.buildparser:main"
 "class-version-verify.py" = "javatoolkit.scripts.class_version_verify:main"
-build-xml-rewrite = "javatoolkit.scripts.build_xml_rewrite:main"
 jarjarclean = "javatoolkit.scripts.jarjarclean:main"
 "eclipse-build.py" = "javatoolkit.scripts.eclipse_build:main"
 
